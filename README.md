@@ -27,7 +27,9 @@ documented below.
 * [Sci-Fi Environment](https://assetstore.unity.com/packages/3d/environments/sci-fi/sci-fi-styled-modular-pack-82913)
 * [toon robot](https://assetstore.unity.com/packages/3d/characters/robots/sleek-toon-bot-free-34490)
     * [simple animations](https://assetstore.unity.com/packages/templates/systems/ragdoll-and-transition-to-mecanim-38568)
+    * [sitting and talking animations](https://assetstore.unity.com/packages/3d/animations/everyday-motion-pack-free-115067)
 * [space skybox](https://assetstore.unity.com/packages/2d/textures-materials/sky/skybox-volume-2-nebula-3392)
+* [howto cooking video](https://www.flickr.com/photos/chegs/with/4743052401/)
 
 ### Versions
 - Unity 2017.2.0f3
