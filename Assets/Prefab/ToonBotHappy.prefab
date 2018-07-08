@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4807157449448544}
   - component: {fileID: 95375122206133332}
+  - component: {fileID: 114705994788863144}
   m_Layer: 0
   m_Name: ToonBotHappy
   m_TagString: Untagged
@@ -638,6 +639,17 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114705994788863144
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1007625096218768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfb6f721f31b949a39738b503718de9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!137 &137340834047540638
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
