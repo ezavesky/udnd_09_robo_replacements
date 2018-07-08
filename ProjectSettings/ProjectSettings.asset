@@ -270,8 +270,8 @@ PlayerSettings:
     m_Enabled: 1
     m_Devices:
     - None
-    - OpenVR
     - Oculus
+    - OpenVR
   - m_BuildTarget: iOS
     m_Enabled: 0
     m_Devices: []
@@ -698,11 +698,12 @@ PlayerSettings:
     daydream:
       daydreamIconForeground: {fileID: 0}
       daydreamIconBackground: {fileID: 0}
-  cloudServicesEnabled: {}
+  cloudServicesEnabled:
+    UNet: 1
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
   cloudProjectId: 1f02ea6e-899d-418d-a05b-c5d2103b71be
-  projectName: 
+  projectName: RubeMarbles
   organizationId: robotvisiondr
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
