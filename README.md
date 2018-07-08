@@ -30,6 +30,7 @@ documented below.
     * [simple animations](https://assetstore.unity.com/packages/templates/systems/ragdoll-and-transition-to-mecanim-38568)
 * [space skybox](https://assetstore.unity.com/packages/2d/textures-materials/sky/skybox-volume-2-nebula-3392)
 * [howto cooking video](https://www.flickr.com/photos/chegs/with/4743052401/)
+* [comic panels font](https://www.dafont.com/comic-panels.font)
 
 ### Versions
 - Unity 2017.2.0f3

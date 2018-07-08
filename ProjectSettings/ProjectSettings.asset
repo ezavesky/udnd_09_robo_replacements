@@ -159,7 +159,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.Company.ProductName
-    Standalone: unity.DefaultCompany.UnityRagdollFull
+    Standalone: com.EricZavesky.RoboReplacement
     Tizen: com.Company.ProductName
     iOS: com.Company.ProductName
     tvOS: com.Company.ProductName
@@ -702,8 +702,8 @@ PlayerSettings:
     UNet: 1
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
-  cloudProjectId: 1f02ea6e-899d-418d-a05b-c5d2103b71be
-  projectName: RubeMarbles
+  cloudProjectId: a9d7fa9b-ff5b-4cdf-bd38-7fd3b37dea97
+  projectName: RoboReplacements
   organizationId: robotvisiondr
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0

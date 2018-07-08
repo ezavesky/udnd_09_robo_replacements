@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: c50cf38aa2eda48d5bd2d6086b9bef55
+timeCreated: 1531084457
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Comic Panels
+  fontNames:
+  - Comic Panels
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 5aa2a6ea8e34b4be1bc580d8793c1da6, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

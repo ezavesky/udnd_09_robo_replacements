@@ -36,6 +36,7 @@ public class GameManager : Singleton<GameManager>
     protected GAME_STATE _state = GAME_STATE.STATE_INITIAL;
     protected GAME_STATE _stateLast = GAME_STATE.STATE_INITIAL;
     protected SceneController sceneController = null;  //allow manipulation of the scene
+    protected DialogController dialogController = null;  //allow manipulation of the dialog
     public Transform toolParentTransform = null;  // transform to use for created tools
 
     // validate star/collectable possiblity when teleported from a valid location
@@ -108,5 +109,20 @@ public class GameManager : Singleton<GameManager>
         sceneController.SceneLoad(nameSceneNext);
         return true;
     }
+
+    // methods for management of dialog
+    public void RegisterDialogController(DialogController dialogControllerNew) 
+    {
+         dialogController = dialogControllerNew;
+    }
+
+    public void DialogTrigger(string nameTrigger, DialogTrigger.TRIGGER_TYPE typeTrigger) 
+    {
+        if (dialogController)
+        {
+            dialogController.TriggerUtterance(nameTrigger, typeTrigger);
+        }
+    }
+
 
 }

@@ -31,7 +31,7 @@ public class SceneController : MonoBehaviour {
         objToolParent = new GameObject("Runtime GameTools"); 
         objToolParent.transform.parent = gameObject.transform;
         GameManager.instance.toolParentTransform = objToolParent.transform;
-	
+
         // finish scene with our current scene
         SceneLoad();
 	}
@@ -122,8 +122,6 @@ public class SceneController : MonoBehaviour {
         // finally change the state back to initial
         GameManager.instance.state = GameManager.GAME_STATE.STATE_INITIAL;
 
-        GoalController sceneGoal = null;
-
         // on complete, find all of the collectables under new scene
         foreach (GameObject objRoot in sceneNew.GetRootGameObjects()) 
         {
@@ -133,20 +131,8 @@ public class SceneController : MonoBehaviour {
                 teleporterController.RediscoverTeleporters(objRoot);
             }
 
-            GoalController localSceneGoal = objRoot.GetComponentInChildren<GoalController>();
-            if (localSceneGoal != null) 
-            {
-                sceneGoal = localSceneGoal;
-            }
-
         }   //end search of goal
 
-
-        // teleport user to spawn within new scene
-        if (sceneGoal) 
-        {
-            sceneGoal.TeleportUser(true);
-        }
 
         // unfade the screen
         headsetFade.Unfade(timeSceneLoadFade*2);
