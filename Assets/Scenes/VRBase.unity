@@ -4095,8 +4095,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8216d87ffeff5949ad1d9f85a47aaa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  throwForce: 1.5
-  objectMenuManager: {fileID: 1991632750}
 --- !u!114 &762651507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6860,7 +6858,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d946183c835bf46d9aea0bd8825cdb2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objDialog: {fileID: 196997854}
+  objDialog: {fileID: 109483330}
 --- !u!1 &1453447403
 GameObject:
   m_ObjectHideFlags: 0
@@ -9242,8 +9240,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e2de9553fe9b48a09f832b5d0137a0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectPrefabList: []
-  objectPrefabUnique: {fileID: 0}
 --- !u!1 &1994753502
 GameObject:
   m_ObjectHideFlags: 0

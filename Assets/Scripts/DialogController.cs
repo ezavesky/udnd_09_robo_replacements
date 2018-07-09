@@ -8,7 +8,13 @@ public class DialogController : MonoBehaviour
     public GameObject objDialog = null;
     protected UnityEngine.UI.Text textDialog = null;
     protected RectTransform transformDialog = null;
-    protected float distSlide = 0.0f;
+
+	protected float openHeight;             // opening height of dialog panel
+	protected float openPos;                // opening y of dialog panel
+
+    protected float timeAnimate = 0.25f;       // time in seconds for animation to finish
+    protected float timeVisible = 5f;       // time in seconds for dialog to be visible
+    protected int showCount = 0;            // number of dialog items queued here  
 
 	// Use this for initialization
 	void Start () {
@@ -16,8 +22,14 @@ public class DialogController : MonoBehaviour
         if (objDialog) 
         {
             transformDialog = objDialog.GetComponent<RectTransform>();
+            if (transformDialog)
+            {
+                openHeight = transformDialog.rect.height;
+                openPos = transformDialog.localPosition.y;
+            }
+
             textDialog = objDialog.GetComponentInChildren<UnityEngine.UI.Text>();
-            ToggleUtterance(null);
+            ToggleUtterance(null, false);
         }
 
         // populate the RANDOMIZER dictionary once
@@ -85,25 +97,93 @@ public class DialogController : MonoBehaviour
     }
 
     // slide the utterance dialog box (e.g. the text caption on and off screen)
-    protected void ToggleUtterance(Utterance uttNew)
+    protected void ToggleUtterance(Utterance uttNew, bool bUseDelay=true)
     {
         //  TODO: slide off screen via timer event
-        if (uttNew == null)
+        bool bShow = false;
+        float localAnimate = bUseDelay ? timeAnimate : 0.0f;
+        float[] floatTrans = {0.0f, 0.0f};
+        if (uttNew != null)
+        {
+            Debug.Log(string.Format("[DialogController]: UtteranceToggle '{1}' (from {0})", uttNew.name, uttNew.text));
+            if (textDialog != null)
+            {
+                bShow = true;
+                textDialog.text = uttNew.text;
+            }
+        }
+        /* -- no need to do anything to text to hide!
+        else 
         {
             if (textDialog != null)
             {
                 textDialog.text = "(hidden)";
             }
         }
-        else 
+        */
+
+        if (transformDialog)
         {
-            Debug.Log(string.Format("[DialogController]: UtteranceToggle '{1}' (from {0})", uttNew.name, uttNew.text));
-            if (textDialog != null)
+            if (bShow)
             {
-                textDialog.text = uttNew.text;
+                if (showCount==0)
+                {
+                    //LeanTween.move(transformDialog, transformVisible, localAnimate)
+                    //    .setEase( LeanTweenType.easeInQuad );
+
+                    LeanTween.value(objDialog, callOnUpdate:UpdateUtterancePosition, 
+                                    from:0.0f, to:1.0f, time:localAnimate)
+                        .setEase( LeanTweenType.easeOutQuad );                        
+                }
+                showCount++;
+                Invoke("HideUtterance", timeVisible+timeAnimate);     //for delay for correct op
+            }
+            else
+            {
+                if (showCount==0) 
+                {
+                    //LeanTween.move(transformDialog, transformHidden, localAnimate)
+                    //    .setEase( LeanTweenType.easeInQuad );
+
+                    LeanTween.value(objDialog, callOnUpdate:UpdateUtterancePosition, 
+                                    from:1.0f, to:0.0f, time:localAnimate)
+                        .setEase( LeanTweenType.easeInQuad );
+                }
             }
         }
     }
+
+    //helper to allow hiding with simple timed invoke function
+    protected void HideUtterance()
+    {
+        showCount--;
+        if (showCount != 0)
+            return;
+        ToggleUtterance(null);
+    }
+
+	private void UpdateUtterancePosition(float fPart, object objRaw) {
+		GameObject objDialogLocal = (GameObject)objRaw;
+        
+		// rtTarget.rect.height = fVal;
+        //float closePos = openPos - 0.5f*openHeight + 0.5f*closeHeight;
+		float closePos = openPos - 1.5f*openHeight;
+		float heightNew = openHeight; // (fPart * (openHeight-closeHeight))+closeHeight;
+		float posNew = (fPart * (openPos-closePos))+closePos;
+        //Debug.Log(string.Format("[{4}] y/h {0}/{1} ---> {2}/{3}", openPos, openHeight, posNew, heightNew, fPart));
+
+		///https://stackoverflow.com/questions/26423549/how-to-modify-recttransform-properties-in-script-unity-4-6-beta
+		Vector2 newSize = new Vector2(transformDialog.rect.size.x, heightNew);
+		Vector2 oldSize = transformDialog.rect.size;
+		Vector2 deltaSize = newSize - oldSize;
+		transformDialog.offsetMin = transformDialog.offsetMin 
+            - new Vector2(deltaSize.x * transformDialog.pivot.x, deltaSize.y * transformDialog.pivot.y);
+		transformDialog.offsetMax = transformDialog.offsetMax 
+            + new Vector2(deltaSize.x * (1f - transformDialog.pivot.x), deltaSize.y * (1f - transformDialog.pivot.y));
+		//update position as well
+        // trans.localPosition = new Vector3(trans.localPosition.x, posNew, trans.localPosition.z);
+		transformDialog.localPosition = new Vector3(transformDialog.localPosition.x, posNew, transformDialog.localPosition.z);
+	}
 
     // optionally track state for next utterance
     protected void TrackState(Utterance uttNew) 
@@ -138,11 +218,11 @@ public class DialogController : MonoBehaviour
     //     semantics for T are either "stay", "enter" or "exit" -- tightly chained to DialogTrigger.TRIGGER_TYPE
     //  interval numbers allow a randomized entry into one of N different changes (or always a single if only one)
     static protected Dictionary<string, Utterance> DICT_UTTERANCE = new Dictionary<string, Utterance>{
-        { "doing_enter_0", new Utterance(null, 0.0f, "I don't eat, but I think you do. Can you help me cook?") }, 
-        { "doing_exit_0", new Utterance(null, 0.0f, "No problem. I will prepare tonights meal from space worms and purified gray water!") }, 
+        { "doing_enter_0", new Utterance(null, 0.0f, "I don't eat, but I compute that you do. Can you teach me to cook?") }, 
+        { "doing_exit_0", new Utterance(null, 0.0f, "No problem. I will prepare tonight's meal from space worms and purified gray water!") }, 
         { "seeing_enter_0", new Utterance(null, 0.0f, "As your world's future architect, I must learn about 'circles'. Can you help?") }, 
-        { "seeing_enter_1", new Utterance(null, 0.5f, "As a simulator, I could add quite well.  I don't think that's the same as building a bridge. Can you help?") }, 
-        { "reading_enter_0", new Utterance(null, 0.0f, "I am writing the next best selling novel.  It must have 'words'. Can you help?") }, 
+        { "seeing_enter_1", new Utterance(null, 0.5f, "As a simulator, I could add quite well. I compute that's the same as building a bridge. Can you help?") }, 
+        { "reading_enter_0", new Utterance(null, 0.0f, "I am writing the next best selling novel. It must have 'words'. Can you help?") }, 
     };
 
     static protected Dictionary<string, List<string>> DICT_RANDOMIZER = new Dictionary<string, List<string> >();

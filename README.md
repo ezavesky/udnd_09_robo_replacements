@@ -31,6 +31,7 @@ documented below.
 * [space skybox](https://assetstore.unity.com/packages/2d/textures-materials/sky/skybox-volume-2-nebula-3392)
 * [howto cooking video](https://www.flickr.com/photos/chegs/with/4743052401/)
 * [comic panels font](https://www.dafont.com/comic-panels.font)
+* [LeanTween package](https://assetstore.unity.com/packages/tools/animation/leantween-3595)
 
 ### Versions
 - Unity 2017.2.0f3
