@@ -105,7 +105,7 @@ public class DialogController : MonoBehaviour
         float[] floatTrans = {0.0f, 0.0f};
         if (uttNew != null)
         {
-            Debug.Log(string.Format("[DialogController]: UtteranceToggle '{1}' (from {0})", uttNew.name, uttNew.text));
+            //Debug.Log(string.Format("[DialogController]: UtteranceToggle '{1}' (from {0})", uttNew.name, uttNew.text));
             if (textDialog != null)
             {
                 bShow = true;
