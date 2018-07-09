@@ -13,7 +13,17 @@ TBD
 TBD
 
 ## Rubric Checks
-TBD
+* **Animation (100)** - animation was incorporated for different robot movements; while the quality and diversity will be imroved, a starter for each station is in place.
+* **Lighting (100)** - where inuffficient with ambient lighting, real-time lamps were replicated and altered for hue; additioanlly, harnessing the directionality of the skybox a strong ambient light was created that has intersting shadow effects through windows.
+* **Locomotion (100)** - locomotion uses a combination of open teleporting along a main path through the output with specific regions of interest denoted with differently colored waypoints
+* **video (max 100)** - primarily used to motivate each task, background videos (open source) were opportunistically included
+* **gamification (250)**
+* **Diegetic UI (250)** - where possible visuals and audio-based communication is given to the user; some text is still required, but attempts were made to condense them into short buttons
+* **storyline (250)** - a lightweight dialog manager was hand-created with region triggers to start and end conversation with robots at different tasks; different conversations can be triggered for the same point using a coarse probabilty + random number selection
+* **AI (250)** - a system for training and evaluating placement of blocks to guess visual patterns was implemented; a supplemental 2D learner application was created to help create training data for online models in the game
+* **speech recognition (500)**
+* **user testing (250)**
+
 
 ## Walkthrough
 Snapshots of the overall and individual levels are 
