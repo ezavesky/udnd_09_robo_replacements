@@ -3,11 +3,10 @@
 This project is part of [Udacity](https://www.udacity.com "Udacity - Be in demand")'s [VR Developer Nanodegree](https://www.udacity.com/course/vr-developer-nanodegree--nd017).
 
 ## Design and Gameplay
-Initial design and tracking is documented in [design docs](docs/design.pdf).  It may be a litle old, but the general goals and
-ideas hold true for the project.
+Extensive design, testing, and scope tracking is documented in [design docs](docs/design.pdf).  
 
 ### User Feedback
-TBD
+User feedback was sampled both for individual design elements as well as longer play sessions.  Check out the design document for more verbose logging and discussion.
 
 ### Future Revisions
 TBD
@@ -22,7 +21,7 @@ TBD
 * **storyline (250)** - a lightweight dialog manager was hand-created with region triggers to start and end conversation with robots at different tasks; different conversations can be triggered for the same point using a coarse probabilty + random number selection
 * **AI (250)** - a system for training and evaluating placement of blocks to guess visual patterns was implemented; a supplemental 2D learner application was created to help create training data for online models in the game
 * **speech recognition (500)**
-* **user testing (250)**
+* **user testing (250)** - user testing was accomplished in two ways, early and quick user testing of individual ideas and visual concepts during design and implementation; a secondary, more complete test was also performed when siginificant milestones (like the completion of a task station); notes were taken along the way in the primary design document
 
 
 ## Walkthrough
