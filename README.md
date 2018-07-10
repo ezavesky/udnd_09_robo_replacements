@@ -41,6 +41,7 @@ documented below.
 * [howto cooking video](https://www.flickr.com/photos/chegs/with/4743052401/)
 * [comic panels font](https://www.dafont.com/comic-panels.font)
 * [LeanTween package](https://assetstore.unity.com/packages/tools/animation/leantween-3595)
+* [reading task screen saver](https://www.youtube.com/watch?v=Fn44paKMX4E) derived from [this screen saver](https://www.screensaversplanet.com/screensavers/retro-sci-fi-522/)
 
 ### Versions
 - Unity 2017.2.0f3

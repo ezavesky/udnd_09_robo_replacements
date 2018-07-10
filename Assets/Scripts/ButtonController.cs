@@ -9,7 +9,7 @@ public class ButtonController : MonoBehaviour
     protected Text displayText;
 
     [System.Serializable]
-    public sealed class ButtonPressed : UnityEvent<object, VRTK.Controllables.ControllableEventArgs>{};
+    public sealed class ButtonPressed : UnityEvent<object, string>{};
     [SerializeField]
     public ButtonPressed OnPressed = new ButtonPressed();
     public ButtonPressed OnReleased = new ButtonPressed();
@@ -74,7 +74,7 @@ public class ButtonController : MonoBehaviour
         {
             if (!wasPressed)
             {
-                OnPressed.Invoke(sender, e);
+                OnPressed.Invoke(sender, buttonName);
                 wasPressed = true;
                 // Debug.Log(string.Format("[ButtonController]: PRESS {3} {0}, min {1}, max {2}", e.value, controllable.AtMinLimit(), controllable.AtMaxLimit(), buttonName));
             }
@@ -82,7 +82,7 @@ public class ButtonController : MonoBehaviour
         else if (wasPressed)
         {
             // Debug.Log(string.Format("[ButtonController]: RELEASE {3}, {0}, min {1}, max {2}", e.value, controllable.AtMinLimit(), controllable.AtMaxLimit(), buttonName));
-            OnReleased.Invoke(sender, e);
+            OnReleased.Invoke(sender, buttonName);
             wasPressed = false;
         }
         /*
