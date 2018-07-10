@@ -13,6 +13,11 @@ public class LearningTool : MonoBehaviour {
 
     public Text textClassifier;     //output for classifier
     public Text textLabels;     //output for classifier
+
+    public Text textNextButton;     //trigger next pattern load
+    public Text textPrevButton;     //trigger prev pattern load
+    protected int idxSet = 0;       //index for current set
+
     protected string pathArchive;
 
 	[NonSerialized]
@@ -24,7 +29,7 @@ public class LearningTool : MonoBehaviour {
         SetsLoad();
 	}
 	
-    public void ClassArchive(string nameClass) 
+    public void ClassSave(string nameClass) 
     {
         lock (LearningTool.thisLock) {
             PrimitiveSet localSet = new PrimitiveSet();
@@ -33,7 +38,7 @@ public class LearningTool : MonoBehaviour {
                 GameObject objTarget = transform.GetChild(i).gameObject;
                 if (objTarget.activeSelf) {                
                     Mouse3D apiOther = objTarget.GetComponent<Mouse3D>();
-                    localSet.listPoints.Add(new PrimitivePoint(apiOther.nameType, objTarget.transform.localPosition));
+                    localSet.listPoints.Add(new PrimitivePoint(apiOther.nameType, objTarget.transform.localPosition, objTarget.transform.localEulerAngles));
                 }
             } 
             localSet.setName = nameClass;       // append the class name 
@@ -46,6 +51,23 @@ public class LearningTool : MonoBehaviour {
         }
     }
 
+    //reload a sample in a specific direction (-1=previous, +1=next, 0=current)
+    public void ClassReload(int idxDirection) 
+    {
+        ClassLoad((idxSet + idxDirection + listSets.Count) % listSets.Count);
+
+    }
+
+    public void ClassLoad(int idxNew) 
+    {
+        Debug.Log(string.Format("[LearningTools]: Class index load {0}", idxNew));
+        //TODO: method for reloading class sample
+        //  clear board
+        //  walk through each shape in set
+        //      reset position to local position
+        //      reset angle by local euler angle
+        //  reset a color/text indicator for what you voted
+    }
 
     public void ClearBoard()
     { 
@@ -70,17 +92,20 @@ public class LearningTool : MonoBehaviour {
     {
         public string ptType;
         public Vector3 ptPosition;
+        public Vector3 ptRotate;
 
         public PrimitivePoint() 
         {
             ptType = "(unknown)";
             ptPosition = Vector3.zero;
+            ptRotate = Vector3.zero;
         }
 
-        public PrimitivePoint(string _type, Vector3 _pos) 
+        public PrimitivePoint(string _type, Vector3 _pos, Vector3 _angle) 
         {
             ptType = _type;
             ptPosition = _pos;
+            ptRotate = _angle;
         }
     }
 
@@ -122,6 +147,19 @@ public class LearningTool : MonoBehaviour {
                 strCounts += string.Format("{0} {1},", kvp.Key, kvp.Value);
             }
             textLabels.text = strCounts;
+        }
+
+        //update previous/next buttons
+        int idxTest;
+        if (textNextButton)
+        {
+            idxTest = (idxSet+1) % listSets.Count;
+            textNextButton.text = string.Format("{0} >", idxTest);
+        }
+        if (textPrevButton)
+        {
+            idxTest = (idxSet-1 + listSets.Count) % listSets.Count;
+            textPrevButton.text = string.Format("< {0}", idxTest);
         }
     }
 

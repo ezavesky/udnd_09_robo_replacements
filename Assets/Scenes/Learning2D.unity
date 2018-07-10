@@ -424,7 +424,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1701045736}
-        m_MethodName: ClassArchive
+        m_MethodName: ClassSave
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1287,7 +1287,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1701045736}
-        m_MethodName: ClassArchive
+        m_MethodName: ClassSave
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2763,7 +2763,7 @@ GameObject:
   - component: {fileID: 1601638222}
   - component: {fileID: 1601638221}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: ButtonNext
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2826,7 +2826,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1601638222}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1701045736}
+        m_MethodName: ClassReload
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1601638222
@@ -3032,7 +3043,7 @@ GameObject:
   - component: {fileID: 1643483603}
   - component: {fileID: 1643483602}
   m_Layer: 5
-  m_Name: Button
+  m_Name: ButtonPrev
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3095,7 +3106,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1643483603}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1701045736}
+        m_MethodName: ClassReload
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: -1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1643483603
@@ -3173,6 +3195,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textClassifier: {fileID: 1501907207}
   textLabels: {fileID: 542691208}
+  textNextButton: {fileID: 914751927}
+  textPrevButton: {fileID: 2080771676}
 --- !u!1 &1744351218
 GameObject:
   m_ObjectHideFlags: 0
@@ -4023,7 +4047,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1701045736}
-        m_MethodName: ClassArchive
+        m_MethodName: ClassSave
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
