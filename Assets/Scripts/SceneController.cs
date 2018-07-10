@@ -86,7 +86,7 @@ public class SceneController : MonoBehaviour {
         {
             objBlackBoxStart.SetActive(false);
         }
-        headsetFade.Unfade(timeSceneLoadFade*3);
+        headsetFade.Unfade(timeSceneLoadFade*2f);
     }
 
 
