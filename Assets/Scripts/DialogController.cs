@@ -17,7 +17,9 @@ public class DialogController : MonoBehaviour
     protected int showCount = 0;            // number of dialog items queued here  
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
+        LoadUtterances(); //must run loader in start
+
 		// attach to OSD mechanism (done via editor, once)
         if (objDialog) 
         {
@@ -29,7 +31,6 @@ public class DialogController : MonoBehaviour
             }
 
             textDialog = objDialog.GetComponentInChildren<UnityEngine.UI.Text>();
-            ToggleUtterance(null, false);
         }
 
         // populate the RANDOMIZER dictionary once
@@ -67,7 +68,12 @@ public class DialogController : MonoBehaviour
         GameManager.instance.RegisterDialogController(this);        
     }
 
-    public string TriggerUtterance(string nameUtterance, DialogTrigger.TRIGGER_TYPE typeUtterance) 
+    void Start() 
+    {
+        ToggleUtterance(null, false);
+    }
+
+    public string TriggerUtterance(string nameUtterance, DialogTrigger.TRIGGER_TYPE typeUtterance, string textAddendum=null) 
     {
         if (typeUtterance==DialogTrigger.TRIGGER_TYPE.TRIGGER_STAY)
             nameUtterance += "_stay";
@@ -92,7 +98,7 @@ public class DialogController : MonoBehaviour
             }
         }
 
-        ToggleUtterance(uttSel);
+        ToggleUtterance(uttSel, true, textAddendum);
         TrackState(uttSel);
 
         //return text for an utterance
@@ -100,7 +106,7 @@ public class DialogController : MonoBehaviour
     }
 
     // slide the utterance dialog box (e.g. the text caption on and off screen)
-    protected void ToggleUtterance(Utterance uttNew, bool bUseDelay=true)
+    protected void ToggleUtterance(Utterance uttNew, bool bUseDelay=true, string textAddendum=null)
     {
         //  TODO: slide off screen via timer event
         bool bShow = false;
@@ -112,7 +118,14 @@ public class DialogController : MonoBehaviour
             if (textDialog != null)
             {
                 bShow = true;
-                textDialog.text = uttNew.text;
+                if (!string.IsNullOrEmpty(textAddendum))
+                {
+                    textDialog.text = uttNew.text + textAddendum;
+                }
+                else 
+                {
+                    textDialog.text = uttNew.text;
+                }
             }
         }
         /* -- no need to do anything to text to hide!
@@ -216,18 +229,35 @@ public class DialogController : MonoBehaviour
         }
     }
 
-    // static reference for dialog entry points
-    //  semantics for naming "XXXX_T_N" where N starts from 0 and can be multiple entries for a name
-    //     semantics for T are either "stay", "enter" or "exit" -- tightly chained to DialogTrigger.TRIGGER_TYPE
-    //  interval numbers allow a randomized entry into one of N different changes (or always a single if only one)
-    static protected Dictionary<string, Utterance> DICT_UTTERANCE = new Dictionary<string, Utterance>{
-        { "doing_enter_0", new Utterance(null, 0.0f, "I don't eat, but I compute that you do. Can you teach me to cook?") }, 
-        { "doing_exit_0", new Utterance(null, 0.0f, "No problem. I will prepare tonight's meal from space worms and purified gray water!") }, 
-        { "seeing_enter_0", new Utterance(null, 0.0f, "As your world's future architect, I must learn about 'circles'. Can you help?") }, 
-        { "seeing_enter_1", new Utterance(null, 0.5f, "As a simulator, I could add quite well. I compute that's the same as building a bridge. Can you help?") }, 
-        { "reading_enter_0", new Utterance(null, 0.0f, "I am writing the next best selling novel. It must have 'words'. Can you help?") }, 
-    };
+    static protected Dictionary<string, Utterance> DICT_UTTERANCE = null;
+    
+    protected void LoadUtterances()
+    {
+        if (DialogController.DICT_UTTERANCE != null) return;
 
+        // static reference for dialog entry points
+        //  semantics for naming "XXXX_T_N" where N starts from 0 and can be multiple entries for a name
+        //     semantics for T are either "stay", "enter" or "exit" -- tightly chained to DialogTrigger.TRIGGER_TYPE
+        //  interval numbers allow a randomized entry into one of N different changes (or always a single if only one)
+        DICT_UTTERANCE = new Dictionary<string, Utterance>{
+            { "doing_enter_0", new Utterance(null, 0.0f, "I don't eat, but I compute that you do. Can you teach me to cook?") }, 
+            { "doing_exit_0", new Utterance(null, 0.0f, "No problem. I will prepare tonight's meal from space worms and purified gray water!") }, 
+            { "seeing_enter_0", new Utterance(null, 0.0f, "As your world's future architect, I must learn about 'circles'. Can you help?") }, 
+            { "seeing_enter_1", new Utterance(null, 0.5f, "As a simulator, I could add quite well. I compute that's the same as building a bridge. Can you help?") }, 
+            { "reading_enter_0", new Utterance(null, 0.0f, "I am writing the next best selling novel. It must have 'words'. Can you help?") }, 
+            { "reading_exit_0", new Utterance(null, 0.0f, "Thanks, but no thanks. These books write themselves now anyway.") }, 
+            { "reading_training_enter_0", new Utterance(null, 0.0f, "You will choose words using the selection buttons on your left to fine-tune my template generated stories. Ready to go?") },
+            { "reading_training_more_enter_0", new Utterance(null, 0.0f, "This is a multiple choice test, but no answer is wrong. Ready to go?") },
+            { "reading_training_more_enter_1", new Utterance(null, 0.3f, "I have been creative for you, use your primal instincts and hit buttons. Ready to go?") },
+            { "reading_training_more_enter_2", new Utterance(null, 0.6f, "Apparently you are adept at pressing buttons. You are now over-qualified. Ready to go?") },
+            { "reading_training_exit_0", new Utterance(null, 0.0f, "Records indicate you have expert level training, I will generate a story now. Press 'go' to continue.") },
+            { "reading_training_exit_1", new Utterance(null, 0.5f, "Great. I have injected you with additional creativity-enhancing 'medicine'. Press 'go' when lucid.") },
+            { "reading_option_enter_0", new Utterance(null, 0.0f, "Please select: ") },
+            { "reading_option_confirmed_enter_0", new Utterance(null, 0.0f, "Non-sense recorded. Please select: ") },
+            { "reading_option_confirmed_enter_1", new Utterance(null, 0.5f, "Illogical answer recorded. Please select: ") },
+        };
+    }
+    
     static protected Dictionary<string, List<string>> DICT_RANDOMIZER = new Dictionary<string, List<string> >();
 	
 }

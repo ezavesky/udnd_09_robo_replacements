@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using VRTK;
 
 public class DialogTrigger : MonoBehaviour {
@@ -9,6 +10,17 @@ public class DialogTrigger : MonoBehaviour {
     protected bool triggerStay = false;
     public bool onlyPlayerTrigger = true;
     public enum TRIGGER_TYPE { TRIGGER_STAY, TRIGGER_EXIT, TRIGGER_ENTER };
+    protected TRIGGER_TYPE typeLast = TRIGGER_TYPE.TRIGGER_EXIT;
+
+    [System.Serializable]
+    public sealed class DialogTriggerEvent : UnityEvent<string, TRIGGER_TYPE>{};
+    [SerializeField]
+    public DialogTriggerEvent OnTrigger = new DialogTriggerEvent();
+
+    public bool IsUserEngaged() 
+    {
+        return typeLast != TRIGGER_TYPE.TRIGGER_EXIT;
+    }
 
 	protected void PlayClip(AudioSource audioSrc, AudioClip audioClip) {
 		if (audioClip==null || audioSrc==null) {
@@ -31,7 +43,9 @@ public class DialogTrigger : MonoBehaviour {
 		if (soundHit != null && audioSrc != null) {
             PlayClip(audioSrc, soundHit);
         }
+        typeLast = typeTrigger;
         GameManager.instance.DialogTrigger(nameTrigger, typeTrigger);
+        OnTrigger.Invoke(nameTrigger, typeTrigger);
 	}
 
 	protected void OnCollisionEnter(Collision other)

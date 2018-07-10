@@ -116,11 +116,11 @@ public class GameManager : Singleton<GameManager>
          dialogController = dialogControllerNew;
     }
 
-    public string DialogTrigger(string nameTrigger, DialogTrigger.TRIGGER_TYPE typeTrigger) 
+    public string DialogTrigger(string nameTrigger, DialogTrigger.TRIGGER_TYPE typeTrigger, string textAddendum=null) 
     {
         if (dialogController)
         {
-            return dialogController.TriggerUtterance(nameTrigger, typeTrigger);
+            return dialogController.TriggerUtterance(nameTrigger, typeTrigger, textAddendum);
         }
         return null;
     }

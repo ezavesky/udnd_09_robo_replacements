@@ -12,7 +12,7 @@ public class IKControl : MonoBehaviour {
     protected Transform rightHandObj = null;
     protected Transform lookObj = null;
 
-    void Start () 
+    void Awake () 
     {
         animator = GetComponent<Animator>();
     }

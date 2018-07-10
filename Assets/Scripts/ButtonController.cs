@@ -53,7 +53,7 @@ public class ButtonController : MonoBehaviour
         }
     }
 
-    void Start()
+    void Awake()
     {
         controllable = GetComponentInChildren<VRTK.Controllables.VRTK_BaseControllable>();
         if (controllable)
