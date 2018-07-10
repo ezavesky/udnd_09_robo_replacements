@@ -67,7 +67,7 @@ public class DialogController : MonoBehaviour
         GameManager.instance.RegisterDialogController(this);        
     }
 
-    public void TriggerUtterance(string nameUtterance, DialogTrigger.TRIGGER_TYPE typeUtterance) 
+    public string TriggerUtterance(string nameUtterance, DialogTrigger.TRIGGER_TYPE typeUtterance) 
     {
         if (typeUtterance==DialogTrigger.TRIGGER_TYPE.TRIGGER_STAY)
             nameUtterance += "_stay";
@@ -80,7 +80,7 @@ public class DialogController : MonoBehaviour
         if (!DialogController.DICT_RANDOMIZER.ContainsKey(nameUtterance)) 
         {
             Debug.Log(string.Format("[DialogController]: Utterance '{0}' not found in dictionary", nameUtterance));
-            return;
+            return null;
         }
         float fRand = (float)randGen.NextDouble();
         Utterance uttSel = null;
@@ -94,6 +94,9 @@ public class DialogController : MonoBehaviour
 
         ToggleUtterance(uttSel);
         TrackState(uttSel);
+
+        //return text for an utterance
+        return uttSel.text;
     }
 
     // slide the utterance dialog box (e.g. the text caption on and off screen)
