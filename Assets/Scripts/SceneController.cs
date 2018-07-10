@@ -6,6 +6,7 @@ using VRTK;
 
 public class SceneController : MonoBehaviour {
     //public string[] nameLevels = new string[0];
+    public GameObject objBlackBoxStart = null;       // one-time on-start fade object
     public TeleportObjToggle teleporterController = null;
     protected string nameSceneMain = null;
     protected string nameSceneLast = null;
@@ -25,6 +26,10 @@ public class SceneController : MonoBehaviour {
         if (headsetFade) 
         {
         	headsetFade.HeadsetFadeComplete += new HeadsetFadeEventHandler(HeadsetFadeComplete);
+        }
+        if (objBlackBoxStart)
+        {
+            objBlackBoxStart.SetActive(true);
         }
 
         // create holder object for tools 
@@ -73,6 +78,17 @@ public class SceneController : MonoBehaviour {
     {
         headsetFade.Fade(new Color(0f, 0f, 0f, 1f), string.IsNullOrEmpty(nameSceneNext) ? 0f : timeSceneLoadFade);
     }
+
+
+    protected void HeadsetUnfadeAfterLevel() 
+    {
+        if (objBlackBoxStart)
+        {
+            objBlackBoxStart.SetActive(false);
+        }
+        headsetFade.Unfade(timeSceneLoadFade*3);
+    }
+
 
     // event complete for end of fade, proceed to scene load
 	protected void HeadsetFadeComplete(object sender, HeadsetFadeEventArgs args) 
@@ -135,7 +151,7 @@ public class SceneController : MonoBehaviour {
 
 
         // unfade the screen
-        headsetFade.Unfade(timeSceneLoadFade*2);
-
+        Invoke("HeadsetUnfadeAfterLevel", 2f);     //for delay for correct op
+        
     }   //end async scene load
 }
