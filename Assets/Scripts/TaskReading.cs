@@ -17,9 +17,9 @@ public class TaskReading : TaskInteractionBase
 
     public float intervalJoke = 5.0f;
 
-    protected enum READ_STATE { STATE_RESET, STATE_START, STATE_TRAIN,  STATE_TRAIN_MORE, STATE_TRAIN_EXIT, STATE_OPTION, 
+    protected enum TASK_STATE { STATE_RESET, STATE_START, STATE_TRAIN,  STATE_TRAIN_MORE, STATE_TRAIN_EXIT, STATE_OPTION, 
                                 STATE_OPTION_CONFIRM, STATE_OPTION_EXIT, STATE_PLAYBACK, STATE_PLAYBACK_EXIT };
-    protected READ_STATE stateLast;
+    protected TASK_STATE stateLast;
     protected bool hasTrained = false;  // has gone through training dialog
     
     protected Dictionary<string, int> dictStoryComplete = new Dictionary<string, int>();   //track if user has completed story
@@ -27,7 +27,7 @@ public class TaskReading : TaskInteractionBase
     protected List<string> listAnswers = new List<string>();
     protected int sentenceActive = 0;
 
-    protected Dictionary<string, READ_STATE> dictNextState = new Dictionary<string, READ_STATE>();
+    protected Dictionary<string, TASK_STATE> dictNextState = new Dictionary<string, TASK_STATE>();
 
     // flow for reading process (with some button names and dialog enters)
     //  Go -> reading_start_enter
@@ -46,16 +46,16 @@ public class TaskReading : TaskInteractionBase
     public override void Awake() 
     {
         base.Awake();
-        LoadImageExamples();
         LoadStoryExamples();
+        LoadImageExamples();
     }
 
     public override void Start()
     {
-        SetReadState(READ_STATE.STATE_RESET);
+        SetTaskState(TASK_STATE.STATE_RESET);
     }
 
-    protected void SetReadState(READ_STATE stateNew)
+    protected void SetTaskState(TASK_STATE stateNew)
     {
         string strQuestion = null;
         string strExample = null;
@@ -68,10 +68,10 @@ public class TaskReading : TaskInteractionBase
         {
             default:
                 Debug.LogError(string.Format("[TaskReading]: Life-systems restarting! State {0} received, but unexpected!", stateNew));
-                SetReadState(READ_STATE.STATE_START);
+                SetTaskState(TASK_STATE.STATE_START);
                 return;
 
-            case READ_STATE.STATE_RESET:
+            case TASK_STATE.STATE_RESET:
                 dictNextState.Clear();
                 buttonB.buttonName = "";
                 buttonB.buttonEnabled = false;
@@ -82,7 +82,7 @@ public class TaskReading : TaskInteractionBase
                 break;
 
 
-            case READ_STATE.STATE_START:
+            case TASK_STATE.STATE_START:
                 dictNextState.Clear();
                 buttonB.buttonName = "Start";
                 buttonB.buttonEnabled = true;
@@ -92,44 +92,44 @@ public class TaskReading : TaskInteractionBase
                 }
                 if (hasTrained)
                 {
-                    dictNextState[buttonB.buttonName] = READ_STATE.STATE_TRAIN_EXIT;
+                    dictNextState[buttonB.buttonName] = TASK_STATE.STATE_TRAIN_EXIT;
                 }
                 else 
                 {
-                    dictNextState[buttonB.buttonName] = READ_STATE.STATE_TRAIN;
+                    dictNextState[buttonB.buttonName] = TASK_STATE.STATE_TRAIN;
                 }
                 buttonA.buttonEnabled = false;
                 buttonC.buttonEnabled = false;
                 strExample = "welcome";
                 break;
 
-            case READ_STATE.STATE_TRAIN:
+            case TASK_STATE.STATE_TRAIN:
                 buttonC.buttonName = "Yes";
-                dictNextState[buttonC.buttonName] = READ_STATE.STATE_TRAIN_EXIT;
+                dictNextState[buttonC.buttonName] = TASK_STATE.STATE_TRAIN_EXIT;
                 buttonA.buttonName = "No";
-                dictNextState[buttonA.buttonName] = READ_STATE.STATE_TRAIN_MORE;
+                dictNextState[buttonA.buttonName] = TASK_STATE.STATE_TRAIN_MORE;
                 strQuestion = GameManager.instance.DialogTrigger("reading_training", DialogTrigger.TRIGGER_TYPE.TRIGGER_ENTER);
                 buttonB.buttonEnabled = false;
                 buttonA.buttonEnabled = buttonC.buttonEnabled = true;
                 strExample = "training";
                 break;
 
-            case READ_STATE.STATE_TRAIN_MORE:
+            case TASK_STATE.STATE_TRAIN_MORE:
                 buttonC.buttonName = "Yes";
-                dictNextState[buttonC.buttonName] = READ_STATE.STATE_TRAIN_EXIT;
+                dictNextState[buttonC.buttonName] = TASK_STATE.STATE_TRAIN_EXIT;
                 buttonA.buttonName = "No";
-                dictNextState[buttonA.buttonName] = READ_STATE.STATE_TRAIN_MORE;
+                dictNextState[buttonA.buttonName] = TASK_STATE.STATE_TRAIN_MORE;
                 strQuestion = GameManager.instance.DialogTrigger("reading_training_more", DialogTrigger.TRIGGER_TYPE.TRIGGER_ENTER);
                 buttonB.buttonEnabled = false;
                 buttonA.buttonEnabled = buttonC.buttonEnabled = true;
                 strExample = "monkey";
                 break;
 
-            case READ_STATE.STATE_TRAIN_EXIT:
+            case TASK_STATE.STATE_TRAIN_EXIT:
                 buttonC.buttonName = "Go";
-                dictNextState[buttonC.buttonName] = READ_STATE.STATE_OPTION;
+                dictNextState[buttonC.buttonName] = TASK_STATE.STATE_OPTION;
                 buttonA.buttonName = "New";
-                dictNextState[buttonA.buttonName] = READ_STATE.STATE_TRAIN_EXIT;
+                dictNextState[buttonA.buttonName] = TASK_STATE.STATE_TRAIN_EXIT;
 
                 {
                     storyActive = null;
@@ -159,13 +159,13 @@ public class TaskReading : TaskInteractionBase
                 // strExample = "";
                 break;
 
-            case READ_STATE.STATE_OPTION_CONFIRM:
+            case TASK_STATE.STATE_OPTION_CONFIRM:
                 // add confirmation message
                 strQuestion = GameManager.instance.DialogTrigger("reading_option_confirmed", DialogTrigger.TRIGGER_TYPE.TRIGGER_ENTER, 
                                                                  OptionsFormulate(storyActive, idxExample));
-                goto case READ_STATE.STATE_OPTION;      // fall through                
+                goto case TASK_STATE.STATE_OPTION;      // fall through                
 
-            case READ_STATE.STATE_OPTION:               
+            case TASK_STATE.STATE_OPTION:               
                 //populate the buttons and get our question text
                 if (string.IsNullOrEmpty(strQuestion)) {
                     strQuestion = GameManager.instance.DialogTrigger("reading_option", DialogTrigger.TRIGGER_TYPE.TRIGGER_ENTER, 
@@ -175,11 +175,11 @@ public class TaskReading : TaskInteractionBase
                 // turn on all options to same destination
                 if (TaskReading.DICT_STORY_EX[storyActive].listExamples.Count-1 == idxExample) 
                 {
-                    dictNextState[buttonA.buttonName] = READ_STATE.STATE_OPTION_EXIT;
+                    dictNextState[buttonA.buttonName] = TASK_STATE.STATE_OPTION_EXIT;
                 }
                 else // more examples to get
                 {
-                    dictNextState[buttonA.buttonName] = READ_STATE.STATE_OPTION_CONFIRM;
+                    dictNextState[buttonA.buttonName] = TASK_STATE.STATE_OPTION_CONFIRM;
                 }
                 dictNextState[buttonB.buttonName] = dictNextState[buttonA.buttonName];
                 dictNextState[buttonC.buttonName] = dictNextState[buttonA.buttonName];
@@ -187,17 +187,17 @@ public class TaskReading : TaskInteractionBase
                 strExample = "idea";
                 break;
 
-            case READ_STATE.STATE_OPTION_EXIT:     // confirm new story mode 
+            case TASK_STATE.STATE_OPTION_EXIT:     // confirm new story mode 
                 sentenceActive = 0;
                 buttonB.buttonName = "Go";
-                dictNextState[buttonB.buttonName] = READ_STATE.STATE_PLAYBACK;
+                dictNextState[buttonB.buttonName] = TASK_STATE.STATE_PLAYBACK;
                 strQuestion = GameManager.instance.DialogTrigger("reading_option", DialogTrigger.TRIGGER_TYPE.TRIGGER_EXIT);
                 buttonB.buttonEnabled = true;
                 buttonA.buttonEnabled = buttonC.buttonEnabled = false;
                 strExample = "idea";
                 break;
 
-            case READ_STATE.STATE_PLAYBACK:     // confirm new story mode 
+            case TASK_STATE.STATE_PLAYBACK:     // confirm new story mode 
                 strQuestion = GameManager.instance.DialogTrigger("reading_playback", DialogTrigger.TRIGGER_TYPE.TRIGGER_STAY,
                                                                 SentenceFormulate(storyActive, sentenceActive));
                 //start with generic, but move to individual if possible
@@ -212,23 +212,23 @@ public class TaskReading : TaskInteractionBase
                 if (sentenceActive < TaskReading.DICT_STORY_EX[storyActive].listSentences.Count)
                 {
                     buttonB.buttonName = "Next";
-                    dictNextState[buttonB.buttonName] = READ_STATE.STATE_PLAYBACK;
+                    dictNextState[buttonB.buttonName] = TASK_STATE.STATE_PLAYBACK;
                 }
                 else 
                 {
                     buttonB.buttonName = "Done";
-                    dictNextState[buttonB.buttonName] = READ_STATE.STATE_PLAYBACK_EXIT;
+                    dictNextState[buttonB.buttonName] = TASK_STATE.STATE_PLAYBACK_EXIT;
                 }
                 buttonB.buttonEnabled = true;
                 buttonA.buttonEnabled = buttonC.buttonEnabled = false;
                 break;
 
-            case READ_STATE.STATE_PLAYBACK_EXIT:     // confirm new story mode 
+            case TASK_STATE.STATE_PLAYBACK_EXIT:     // confirm new story mode 
                 sentenceActive = 0;     // reset index for re-read
                 buttonC.buttonName = "Restart";
-                dictNextState[buttonC.buttonName] = READ_STATE.STATE_TRAIN_EXIT;
+                dictNextState[buttonC.buttonName] = TASK_STATE.STATE_TRAIN_EXIT;
                 buttonA.buttonName = "Replay";
-                dictNextState[buttonA.buttonName] = READ_STATE.STATE_PLAYBACK;
+                dictNextState[buttonA.buttonName] = TASK_STATE.STATE_PLAYBACK;
                 strQuestion = GameManager.instance.DialogTrigger("reading_option", DialogTrigger.TRIGGER_TYPE.TRIGGER_EXIT);
                 buttonB.buttonEnabled = false;
                 buttonA.buttonEnabled = buttonC.buttonEnabled = true;
@@ -310,12 +310,12 @@ public class TaskReading : TaskInteractionBase
     {
         if (typeTrigger != DialogTrigger.TRIGGER_TYPE.TRIGGER_EXIT)     //enter -> start
         {
-            SetReadState(READ_STATE.STATE_START);
+            SetTaskState(TASK_STATE.STATE_START);
             StartCoroutine("JokeUpdate");
         }
         else    // exit -> reset
         {
-            SetReadState(READ_STATE.STATE_RESET);
+            SetTaskState(TASK_STATE.STATE_RESET);
             StopCoroutine("JokeUpdate");
         }
     }
@@ -330,12 +330,12 @@ public class TaskReading : TaskInteractionBase
     {
         if (dictNextState.ContainsKey(buttonName))
         {
-            READ_STATE stateNew = dictNextState[buttonName];
-            if (READ_STATE.STATE_OPTION_CONFIRM == stateNew ||  stateNew == READ_STATE.STATE_OPTION_EXIT)    // save name as result
+            TASK_STATE stateNew = dictNextState[buttonName];
+            if (TASK_STATE.STATE_OPTION_CONFIRM == stateNew ||  stateNew == TASK_STATE.STATE_OPTION_EXIT)    // save name as result
             {
                 listAnswers.Add(buttonName);
             }
-            SetReadState(dictNextState[buttonName]);
+            SetTaskState(dictNextState[buttonName]);
         }
         else 
         {
@@ -411,7 +411,7 @@ public class TaskReading : TaskInteractionBase
             { "people", new ImageExample("read_people", "people") },
             { "pens", new ImageExample("read_pens", "pens") },
             { "sleeps on", new ImageExample("read_baby", "sleeps on") },
-            { "eats", new ImageExample("read_pumpkin", "eats") },
+            { "eats", new ImageExample("read_pumpkin_eat", "eats") },
             { "draws on", new ImageExample("read_children", "draws on") },
             { "India", new ImageExample("read_india", "India") },
             { "the Bahamas", new ImageExample("read_beach", "Bahamas") },
@@ -419,6 +419,19 @@ public class TaskReading : TaskInteractionBase
             { "idea", new ImageExample("read_idea", "question") },
             { "printing", new ImageExample("read_library", "mandatory reading") },
             { "recycle", new ImageExample("read_scrabble", "always recycle") },
+            { "eagles", new ImageExample("read_eagle", "eagles") },
+            { "sleeping", new ImageExample("read_baby", "sleeping") },
+            { "fly", new ImageExample("read_eagle", "fly") },
+            { "draw", new ImageExample("read_children", "draw") },
+            { "rainforest preservation", new ImageExample("read_rainforest", "rainforest preservation") },
+            { "world hunger", new ImageExample("read_pumpkin_eat", "world hunger") },
+            { "robots", new ImageExample("read_robot", "robots") },
+            { "addition", new ImageExample("read_math", "addition") },
+            { "driving", new ImageExample("read_dogdrive", "driving") },
+            { "boxing", new ImageExample("read_boxing", "boxing") },
+            { "melted ice cream", new ImageExample("read_icecream", "melted ice cream") },
+            { "time-travel", new ImageExample("read_lighthoodie", "time-travel") },
+            { "brushing", new ImageExample("read_toothbrush", "brushing") },
         };
     }
 
@@ -494,6 +507,34 @@ public class TaskReading : TaskInteractionBase
                     })
                 })  //end examples within story
             },  //end a story
+
+            { "helpers", new StoryExample(
+                "helpers", new List<string>{
+                    "Many more {0} are made to help us every day.", "They can do simple tasks like {1}.",
+                    "And they can do complex tasks like {2}.", "I once read about {0} that could {3} in the future!",
+                    "One problem {0} probably won't solve is {4} due to the number of {5}.", "I like {0} a lot, don't you?" },
+                new List<SentenceExample>{
+                    new SentenceExample("being", new List<string>{
+                        "robots", "eagles", "children" 
+                    }),
+                    new SentenceExample("job", new List<string>{
+                        "eating", "sleeping", "addition" 
+                    }),
+                    new SentenceExample("job", new List<string>{
+                        "driving", "boxing", "brushing" 
+                    }),
+                    new SentenceExample("task", new List<string>{
+                        "draw", "fly", "time-travel"
+                    }),
+                    new SentenceExample("problems", new List<string>{
+                        "rainforest preservation", "world hunger", "melted ice cream"
+                    }),
+                    new SentenceExample("trouble", new List<string>{
+                        "phones", "tigers", "people" 
+                    }),
+                })  //end examples within story
+            },  //end a story
+
         };  //end dictionary init
 
     }   //end load function

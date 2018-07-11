@@ -41,6 +41,8 @@ documented below.
 * [howto cooking video](https://www.flickr.com/photos/chegs/with/4743052401/)
 * [comic panels font](https://www.dafont.com/comic-panels.font)
 * [LeanTween package](https://assetstore.unity.com/packages/tools/animation/leantween-3595)
+* [simple camera model](https://assetstore.unity.com/packages/3d/props/electronics/free-pbr-security-camera-70061)
+* [food pack](https://assetstore.unity.com/packages/3d/props/food/free-food-pack-85884)
 
 ### Story Media
 * [reading task screen saver](https://www.youtube.com/watch?v=Fn44paKMX4E) derived from [this screen saver](https://www.screensaversplanet.com/screensavers/retro-sci-fi-522/)
@@ -67,6 +69,12 @@ documented below.
 * [idea bulb](https://www.pexels.com/photo/analysis-blackboard-board-bubble-355952/)
 * [library](https://www.pexels.com/photo/full-length-of-man-sitting-on-floor-256431/)
 * [scrabble](https://www.pexels.com/photo/alphabet-close-up-communication-conceptual-278887/)
+* [robots](https://www.pexels.com/photo/wall-e-die-cast-model-981588/)
+* [dog driving](https://www.pexels.com/photo/adorable-adult-animal-automotive-236452/)
+* [boxing](https://www.pexels.com/photo/man-couple-people-woman-343/)
+* [ice cream](https://www.pexels.com/photo/woman-dropped-fail-failure-4091/)
+* [stream light hoodie](https://www.pexels.com/photo/photography-of-person-wearing-hoodie-jacket-590701/)
+* [tooth brush](https://www.pexels.com/photo/clean-mouth-teeth-dentist-40798/)
 
 ### Versions
 - Unity 2017.2.0f3
