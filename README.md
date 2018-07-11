@@ -64,6 +64,9 @@ documented below.
 * [pumpkin eater](https://www.pexels.com/photo/adult-autumn-biting-close-up-265316/)
 * [India Taj](https://www.pexels.com/photo/ancient-architecture-asia-building-602607/)
 * [beach](https://www.pexels.com/photo/dock-with-cottages-877962/)
+* [idea bulb](https://www.pexels.com/photo/analysis-blackboard-board-bubble-355952/)
+* [library](https://www.pexels.com/photo/full-length-of-man-sitting-on-floor-256431/)
+* [scrabble](https://www.pexels.com/photo/alphabet-close-up-communication-conceptual-278887/)
 
 ### Versions
 - Unity 2017.2.0f3

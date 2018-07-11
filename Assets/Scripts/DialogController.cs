@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class DialogController : MonoBehaviour 
 {
-    protected System.Random randGen = new System.Random();
     public GameObject objDialog = null;
     protected UnityEngine.UI.Text textDialog = null;
     protected RectTransform transformDialog = null;
@@ -88,7 +87,7 @@ public class DialogController : MonoBehaviour
             Debug.Log(string.Format("[DialogController]: Utterance '{0}' not found in dictionary", nameUtterance));
             return null;
         }
-        float fRand = (float)randGen.NextDouble();
+        float fRand = (float)GameManager.instance.rand.NextDouble();
         Utterance uttSel = null;
         foreach (string strSubUtter in DialogController.DICT_RANDOMIZER[nameUtterance])
         {
@@ -98,15 +97,14 @@ public class DialogController : MonoBehaviour
             }
         }
 
-        ToggleUtterance(uttSel, true, textAddendum);
         TrackState(uttSel);
 
         //return text for an utterance
-        return uttSel.text;
+        return ToggleUtterance(uttSel, true, textAddendum);
     }
 
     // slide the utterance dialog box (e.g. the text caption on and off screen)
-    protected void ToggleUtterance(Utterance uttNew, bool bUseDelay=true, string textAddendum=null)
+    protected string ToggleUtterance(Utterance uttNew, bool bUseDelay=true, string textAddendum=null)
     {
         //  TODO: slide off screen via timer event
         bool bShow = false;
@@ -167,6 +165,8 @@ public class DialogController : MonoBehaviour
                 }
             }
         }
+        //return new textual utterance
+        return (textDialog != null) ? textDialog.text : null;
     }
 
     //helper to allow hiding with simple timed invoke function
@@ -250,11 +250,14 @@ public class DialogController : MonoBehaviour
             { "reading_training_more_enter_0", new Utterance(null, 0.0f, "This is a multiple choice test, but no answer is wrong. Ready to go?") },
             { "reading_training_more_enter_1", new Utterance(null, 0.3f, "I have been creative for you, use your primal instincts and hit buttons. Ready to go?") },
             { "reading_training_more_enter_2", new Utterance(null, 0.6f, "Apparently you are adept at pressing buttons. You are now over-qualified. Ready to go?") },
-            { "reading_training_exit_0", new Utterance(null, 0.0f, "Records indicate you have expert level training, I will generate a story now. Press 'go' to continue.") },
-            { "reading_training_exit_1", new Utterance(null, 0.5f, "Great. I have injected you with additional creativity-enhancing 'medicine'. Press 'go' when lucid.") },
+            { "reading_training_exit_0", new Utterance(null, 0.0f, "Records indicate you have expert-level training. Press 'go' to continue to ") },
+            { "reading_training_exit_1", new Utterance(null, 0.5f, "I have injected you with additional creativity-enhancing 'medicine'. Press 'go' when lucid for ") },
             { "reading_option_enter_0", new Utterance(null, 0.0f, "Please select: ") },
             { "reading_option_confirmed_enter_0", new Utterance(null, 0.0f, "Non-sense recorded. Please select: ") },
             { "reading_option_confirmed_enter_1", new Utterance(null, 0.5f, "Illogical answer recorded. Please select: ") },
+            { "reading_option_exit_0", new Utterance(null, 0.0f, "Congratulations, your story is now mandatory educational reading! Press 'go' to read it.") },
+            { "reading_playback_stay_0", new Utterance(null, 0.0f, "") },
+            
         };
     }
     

@@ -38,6 +38,7 @@ public class GameManager : Singleton<GameManager>
     protected SceneController sceneController = null;  //allow manipulation of the scene
     protected DialogController dialogController = null;  //allow manipulation of the dialog
     public Transform toolParentTransform = null;  // transform to use for created tools
+    public System.Random rand = new System.Random();    // shared random number gen
 
     // validate star/collectable possiblity when teleported from a valid location
     public bool normalPlay { 
@@ -125,5 +126,23 @@ public class GameManager : Singleton<GameManager>
         return null;
     }
 
+    //method to randomize/shuffle any list
+    //  http://www.vcskicks.com/randomize_array.php
+    public List<E> ShuffleList<E>(List<E> inputList)
+    {
+        // WARNING, does not do deep copies of list!!
+        List<E> copyList = new List<E>(inputList);
+        List<E> randomList = new List<E>();
+
+        int randomIndex = 0;
+        while (copyList.Count > 0)
+        {
+            randomIndex = rand.Next(0, copyList.Count); //Choose a random object in the list
+            randomList.Add(copyList[randomIndex]); //add it to the new, random list
+            copyList.RemoveAt(randomIndex); //remove to avoid duplicates
+        }
+
+        return randomList; //return the new random list
+    }
 
 }

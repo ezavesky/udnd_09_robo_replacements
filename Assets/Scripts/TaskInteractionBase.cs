@@ -25,6 +25,5 @@ public class TaskInteractionBase : MonoBehaviour {
     virtual protected void ReceiveDialogTrigger(string nameTrigger, DialogTrigger.TRIGGER_TYPE typeTrigger)
     {
         //TODO: add something to interpret dialog trigger notifications?
-        Debug.Log("IN PARENT!");
     }
 }
