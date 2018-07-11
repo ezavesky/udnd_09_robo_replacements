@@ -255,9 +255,14 @@ public class DialogController : MonoBehaviour
             { "reading_option_enter_0", new Utterance(null, 0.0f, "Please select: ") },
             { "reading_option_confirmed_enter_0", new Utterance(null, 0.0f, "Non-sense recorded. Please select: ") },
             { "reading_option_confirmed_enter_1", new Utterance(null, 0.5f, "Illogical answer recorded. Please select: ") },
+            { "reading_option_confirmed_enter_2", new Utterance(null, 0.75f, "Um, okay. Sure. Please select: ") },
             { "reading_option_exit_0", new Utterance(null, 0.0f, "Congratulations, your story is now mandatory educational reading! Press 'go' to read it.") },
             { "reading_playback_stay_0", new Utterance(null, 0.0f, "") },
-            
+            { "doing_intro_enter_0", new Utterance(null, 0.0f, "Please use your 'cooking skills' to emulate the synthesized food item. Press 'go' to continue or 'next' for another item.") },
+            { "doing_intro_enter_1", new Utterance(null, 0.7f, "Your task is to stack synthesized food items to match the target. Press 'go' to continue or 'next' for another item.") },
+            { "doing_game_enter_0", new Utterance(null, 0.0f, "I will copy your actions and compute a match. Press 'done' if you finish before time runs out.") },
+            { "doing_game_exit_0", new Utterance(null, 0.0f, "Your assembly task is done.  I will catalog your scores as evidence of human 'efficiency'.  Press 'restart' to try again.") },
+            { "doing_game_exit_1", new Utterance(null, 0.5f, "Did that feel like forever to you, too? This 'achievement' was logged to your employment file. task is done. Press 'restart' to try again.") },
         };
     }
     
