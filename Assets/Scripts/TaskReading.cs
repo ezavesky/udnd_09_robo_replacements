@@ -412,6 +412,7 @@ public class TaskReading : TaskInteractionBase
             { "pens", new ImageExample("read_pens", "pens") },
             { "sleeps on", new ImageExample("read_baby", "sleeps on") },
             { "eats", new ImageExample("read_pumpkin_eat", "eats") },
+            { "eating", new ImageExample("read_pumpkin_eat", "eating") },
             { "draws on", new ImageExample("read_children", "draws on") },
             { "India", new ImageExample("read_india", "India") },
             { "the Bahamas", new ImageExample("read_beach", "Bahamas") },
