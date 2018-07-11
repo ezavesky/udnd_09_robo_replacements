@@ -15,6 +15,8 @@ public class TaskReading : TaskInteractionBase
     public Text textJokes;
     public Image imageMedia;
 
+    public float intervalJoke = 5.0f;
+
     protected enum READ_STATE { STATE_RESET, STATE_START, STATE_TRAIN,  STATE_TRAIN_MORE, STATE_TRAIN_EXIT, STATE_OPTION, 
                                 STATE_OPTION_CONFIRM, STATE_OPTION_EXIT, STATE_PLAYBACK, STATE_PLAYBACK_EXIT };
     protected READ_STATE stateLast;
@@ -75,6 +77,7 @@ public class TaskReading : TaskInteractionBase
                 buttonB.buttonEnabled = false;
                 buttonA.buttonEnabled = false;
                 buttonC.buttonEnabled = false;
+                textJokes.text = "";
                 strExample = "welcome";
                 break;
 
@@ -159,14 +162,14 @@ public class TaskReading : TaskInteractionBase
             case READ_STATE.STATE_OPTION_CONFIRM:
                 // add confirmation message
                 strQuestion = GameManager.instance.DialogTrigger("reading_option_confirmed", DialogTrigger.TRIGGER_TYPE.TRIGGER_ENTER, 
-                                                                 FormulateOptions(storyActive, idxExample));
+                                                                 OptionsFormulate(storyActive, idxExample));
                 goto case READ_STATE.STATE_OPTION;      // fall through                
 
             case READ_STATE.STATE_OPTION:               
                 //populate the buttons and get our question text
                 if (string.IsNullOrEmpty(strQuestion)) {
                     strQuestion = GameManager.instance.DialogTrigger("reading_option", DialogTrigger.TRIGGER_TYPE.TRIGGER_ENTER, 
-                                                                     FormulateOptions(storyActive, idxExample));
+                                                                     OptionsFormulate(storyActive, idxExample));
                 }
 
                 // turn on all options to same destination
@@ -196,7 +199,7 @@ public class TaskReading : TaskInteractionBase
 
             case READ_STATE.STATE_PLAYBACK:     // confirm new story mode 
                 strQuestion = GameManager.instance.DialogTrigger("reading_playback", DialogTrigger.TRIGGER_TYPE.TRIGGER_STAY,
-                                                                FormulateSentence(storyActive, sentenceActive));
+                                                                SentenceFormulate(storyActive, sentenceActive));
                 //start with generic, but move to individual if possible
                 strExample = "printing";
                 if (TaskReading.DICT_STORY_EX[storyActive].listExamples.Count > sentenceActive) 
@@ -247,7 +250,7 @@ public class TaskReading : TaskInteractionBase
     }
 
     // method to offer options
-    protected string FormulateOptions(string nameStory, int idxExample) 
+    protected string OptionsFormulate(string nameStory, int idxExample) 
     {
         //randomize options for each round
         List<string> listRandAnswers = GameManager.instance.ShuffleList<string>(
@@ -264,7 +267,7 @@ public class TaskReading : TaskInteractionBase
     }
 
     // method to replay story with options
-    protected string FormulateSentence(string nameStory, int idxSentence)
+    protected string SentenceFormulate(string nameStory, int idxSentence)
     {
         return string.Format(TaskReading.DICT_STORY_EX[nameStory].listSentences[idxSentence], listAnswers.ToArray());
     }
@@ -285,15 +288,35 @@ public class TaskReading : TaskInteractionBase
         }
     }
 
+    //every so often update joke panel with new text
+    IEnumerator JokeUpdate()
+    {
+        while (true)
+        {
+            if (textJokes) 
+            {
+                int idxJoke = GameManager.instance.rand.Next(LIST_JOKE_EX.Count-1);
+                textJokes.text = LIST_JOKE_EX[idxJoke].textJoke;
+                textJokes.color = LIST_JOKE_EX[idxJoke].textColor;
+            }
+            // Yield execution of this coroutine and return to the main loop until next frame
+            yield return new WaitForSeconds(intervalJoke);
+        }
+    }
+
+    // methods receieving events from external callers
+
     override protected void ReceiveDialogTrigger(string nameTrigger, DialogTrigger.TRIGGER_TYPE typeTrigger)
     {
         if (typeTrigger != DialogTrigger.TRIGGER_TYPE.TRIGGER_EXIT)     //enter -> start
         {
             SetReadState(READ_STATE.STATE_START);
+            StartCoroutine("JokeUpdate");
         }
         else    // exit -> reset
         {
             SetReadState(READ_STATE.STATE_RESET);
+            StopCoroutine("JokeUpdate");
         }
     }
 
@@ -336,6 +359,30 @@ public class TaskReading : TaskInteractionBase
             sprite = Resources.Load<Sprite>(string.Format("Sprites/{0}", _path));
         }
     }
+
+    // static reference for jokes
+
+    [SerializeField]
+    public class JokeExample 
+    {
+        public string textJoke;
+        public Color textColor;
+        
+        public JokeExample(string _text, Color _color)
+        {
+            textJoke = _text;
+            textColor = _color;
+        }
+    }
+
+    static protected List<JokeExample> LIST_JOKE_EX = new List<JokeExample>{
+        new JokeExample("Your PC ran into a problem that it couldn't handle and now it needs to restart.", Color.blue),
+        new JokeExample("All your bases are belong to us.", Color.yellow),
+        new JokeExample("Critical error, all email routed to /dev/null.", Color.red),
+        new JokeExample("You should have chosen the blue pill.", Color.green),
+        new JokeExample("If you're reading this, who is driving?", Color.white),
+    };
+
 
     // static reference for image examples
     static protected Dictionary<string, ImageExample> DICT_IMAGE_EX = null;
