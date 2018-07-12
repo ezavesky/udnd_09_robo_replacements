@@ -12,15 +12,17 @@ public class TaskDoing : TaskInteractionBase {
     public Text textTimeLeft;
     public Text textAccuracy;
     protected float intervalScoreboard = 0.5f;
-    public float timeGame = 30.0f;
+    protected float timeGame = 120.0f;
     protected float timeRemain = 0.0f;
 
+    public Transform rootPlateReference;
     public Transform rootPlatePlayer;
     public Transform rootPlateRobot;
     public Transform rootResourcesPlayer;
     public Transform rootResourcesRobot;
 
-    public GameObject[] objPrefabExamples = new GameObject[0];      // objects used for games
+    public GameObject objFoodSource;
+    protected List<GameObject> listFoods = new List<GameObject>();
     public GameObject rootAnimationFreeze = null;
 
     public GameObject objLeftGrab = null;
@@ -28,6 +30,7 @@ public class TaskDoing : TaskInteractionBase {
     
     protected int idxPrefabActive = 0;
     protected Dictionary<int, GameObject> dictObjectPair = new Dictionary<int, GameObject>();
+    protected Dictionary<int, GameObject> dictObjectReference = new Dictionary<int, GameObject>();
     protected Dictionary<int, List<GameObject>> dictPrefabSets = new Dictionary<int, List<GameObject>>();
 
     protected enum TASK_STATE { STATE_RESET, STATE_START, STATE_START_NEXT, STATE_GAME_START, STATE_PIECE, STATE_FINISH };
@@ -72,17 +75,16 @@ public class TaskDoing : TaskInteractionBase {
                 buttonA.buttonEnabled = buttonB.buttonEnabled = false;
                 textAccuracy.text = "";
                 textTimeLeft.text = "";
-                ActivatePrefabSet(-1, false);
-                ChildrenSetActive(rootAnimationFreeze.transform, false);    //deactivate cameras, lazy susan
+                Invoke("FreezeDisplay", 0.5f);     // delay for camera textures to grab a snapshot
+                dictNextState.Clear();
                 break;
 
             case TASK_STATE.STATE_START_NEXT:
-                idxPrefabActive = (idxPrefabActive + 1) % objPrefabExamples.Length;
+                idxPrefabActive = (idxPrefabActive + 1) % listFoods.Count;
                 goto case TASK_STATE.STATE_START;    //fall through
 
             case TASK_STATE.STATE_START:
-                dictNextState.Clear();
-                objPrefabExamples[idxPrefabActive].SetActive(true);
+                listFoods[idxPrefabActive].SetActive(true);
                 ChildrenSetActive(rootAnimationFreeze.transform, true);     //activate cameras, lazy susan
                 buttonA.buttonName = "Next";
                 dictNextState[buttonA.buttonName] = TASK_STATE.STATE_START_NEXT;
@@ -93,13 +95,14 @@ public class TaskDoing : TaskInteractionBase {
                 break;                
 
             case TASK_STATE.STATE_GAME_START:
-                ActivatePrefabSet(idxPrefabActive, true);
+                ActivatePrefabSet(idxPrefabActive, PREFAB_STATE.ACTIVE);
                 buttonB.buttonName = "Done!";
                 dictNextState[buttonB.buttonName] = TASK_STATE.STATE_FINISH;
                 buttonA.buttonEnabled = false;
                 buttonB.buttonEnabled = true;
                 timeRemain = timeGame;
                 textHelp.text = GameManager.instance.DialogTrigger("doing_game", DialogTrigger.TRIGGER_TYPE.TRIGGER_ENTER);
+                Invoke("StabalizePrefabs", 1.0f);     // delay for correct op
                 break;                
 
             case TASK_STATE.STATE_FINISH:
@@ -124,23 +127,25 @@ public class TaskDoing : TaskInteractionBase {
             transParent.GetChild(i).gameObject.SetActive(newState);
         }
     }
+    protected enum PREFAB_STATE { INACTIVE, ACTIVE, SETTLE };
 
-    protected void ActivatePrefabSet(int idxPrefab, bool bEnable=false)
+    protected void ActivatePrefabSet(int idxPrefab, PREFAB_STATE stateNew=PREFAB_STATE.INACTIVE)
     {
+        Rigidbody rb = null;
         if (idxPrefab == -1)    //helper mode to take action for all prefabs
         {
-            for (int i=0; i<objPrefabExamples.Length; i++)
+            for (int i=0; i<listFoods.Count; i++)
             {
-                ActivatePrefabSet(i, bEnable);
+                ActivatePrefabSet(i, stateNew);
             }
             return;
         }
-        if (idxPrefab >= objPrefabExamples.Length)  //check bounds
+        if (idxPrefab >= listFoods.Count)  //check bounds
             return;
-        objPrefabExamples[idxPrefab].SetActive(bEnable);
+        listFoods[idxPrefab].SetActive(stateNew==PREFAB_STATE.ACTIVE);
         foreach (GameObject objClone in dictPrefabSets[idxPrefab])  //disable all objects for this prefab
         {
-            if (!bEnable)
+            if (stateNew==PREFAB_STATE.INACTIVE)
             {
                 objClone.SetActive(false);
             }
@@ -148,46 +153,105 @@ public class TaskDoing : TaskInteractionBase {
             {
                 if (dictObjectPair.ContainsKey(objClone.GetInstanceID()))       //has instance match, it's player object
                 {
-                    objClone.transform.position = rootResourcesPlayer.position;
+                    if (stateNew==PREFAB_STATE.ACTIVE)
+                    {
+                        objClone.transform.position = rootResourcesPlayer.position;
+                    }
+                    else 
+                    {
+                        rb = objClone.GetComponent<Rigidbody>();
+                        rb.isKinematic = true;                        
+                    }
                 }
                 else
                 {
-                    objClone.transform.position = rootResourcesRobot.position;
+                    if (stateNew==PREFAB_STATE.ACTIVE)
+                    {
+                        objClone.transform.position = rootResourcesRobot.position;
+                    }
+                    else 
+                    {
+                        rb = objClone.GetComponent<Rigidbody>();
+                        rb.isKinematic = true;                        
+                    }
                 }
                 objClone.SetActive(true);   // let object fall into basket from anchor
             }
         }
     } 
 
+    protected void FreezeDisplay() 
+    {
+        //method for freezing display after reset or after camera textures have grabbed example
+        ActivatePrefabSet(-1, PREFAB_STATE.INACTIVE);
+        ChildrenSetActive(rootAnimationFreeze.transform, false);    //deactivate cameras, lazy susan
+    }
+
+    protected void StabalizePrefabs() 
+    {
+        //annoying but necessary step to make things not jump around as much after gravity-based fall
+        ActivatePrefabSet(idxPrefabActive, PREFAB_STATE.SETTLE);
+    }
+
     protected void ClonePrefabSets() 
     {
         //tasks: clone sets of prefab examples into two pairs: player and robobt ones
         //       create a nested object under this one to contain all sets
         GameObject cloneRoot = new GameObject();
-        cloneRoot.SetActive(false);
         cloneRoot.name = "_cloneRoot";
         cloneRoot.transform.parent = transform;
+        //TODO: clobber this cloneroot, too?
+        listFoods.Clear();
 
+        GameObject objSource = null;
+        GameObject objFoodBase = null;
         GameObject newPlayerHandle = null;
         GameObject newRobotHandle = null;
+        Rigidbody rb = null;
         
-        for (int i=0; i<objPrefabExamples.Length; i++) 
+        for (int i=0; i<objFoodSource.transform.GetChildCount(); i++) 
         {
+            objFoodBase = objFoodSource.transform.GetChild(i).gameObject;
+            listFoods.Add(objFoodBase);
             dictPrefabSets[i] = new List<GameObject>();
-            for (int j=0; j<objPrefabExamples[0].transform.childCount; j++)
+            for (int j=0; j<objFoodBase.transform.childCount; j++)
             {
-                newPlayerHandle = Instantiate(objPrefabExamples[0].transform.GetChild(j).gameObject);
+                objSource = objFoodBase.transform.GetChild(j).gameObject;
+                rb = objSource.GetComponent<Rigidbody>();
+                if (rb) 
+                {
+                    rb.isKinematic = true;
+                }
+
+                newPlayerHandle = Instantiate(objSource);
+                newPlayerHandle.SetActive(false);
                 newPlayerHandle.transform.parent = cloneRoot.transform;
                 newPlayerHandle.isStatic = false;
-                newRobotHandle = Instantiate(objPrefabExamples[0].transform.GetChild(j).gameObject);
+                rb = newPlayerHandle.GetComponent<Rigidbody>();
+                if (rb) 
+                {
+                    rb.isKinematic = false;
+                    rb.velocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                }
+                newRobotHandle = Instantiate(objSource);
+                newRobotHandle.SetActive(false);
                 newRobotHandle.transform.parent = cloneRoot.transform;
                 newRobotHandle.isStatic = false;
+                rb = newRobotHandle.GetComponent<Rigidbody>();
+                if (rb) 
+                {
+                    rb.isKinematic = false;
+                    rb.velocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                }
 
                 dictPrefabSets[i].Add(newPlayerHandle);     //save in list for easy retrieval
                 dictPrefabSets[i].Add(newRobotHandle);
+                dictObjectReference[objSource.GetInstanceID()] = newPlayerHandle;   //establish link to reference object
                 dictObjectPair[newPlayerHandle.GetInstanceID()] = newRobotHandle;   //establish link to robot object
             }
-            objPrefabExamples[0].SetActive(false);
+            objFoodBase.SetActive(false);
         }
     }
 
@@ -197,20 +261,59 @@ public class TaskDoing : TaskInteractionBase {
 
     // method to switch to tracking food object in robot's hands
 
+
+
+    protected float ComputeMatch(float weightDistance, float weightAngle)  
+    {
+        //method to compute distance and rotation from reference/user items
+        float userDist = 0f;
+        float userAngle = 0f;
+        GameObject objRef = null;
+        GameObject objCompare = null;
+
+        //foreach item in the reference
+        for (int i=0; i < listFoods[idxPrefabActive].transform.GetChildCount(); i++)
+        {
+            objRef = listFoods[idxPrefabActive].transform.GetChild(i).gameObject;
+            if (!dictObjectReference.ContainsKey(objRef.GetInstanceID()))
+            {
+                Debug.LogWarning(string.Format("[TaskDoing]: Warning, reference object {0} (id {1}) not found in compare hierarchy.", objRef.name, objRef.GetInstanceID()));
+            }
+            else {
+                objCompare = dictObjectReference[objRef.GetInstanceID()];
+                //  compute the position (plate normalized) differences
+                //  compute the angular differences
+
+            }
+        }
+
+        //return the weighted total of user components
+        return (userDist * weightDistance) + (userAngle * weightAngle);
+    }
+
+
     //every so often update joke panel with new text
     IEnumerator ScoreboardUpdate()
     {
-        bool hasBuzzed = false;
+        float timeLast = Time.fixedTime;
         while (true)
         {
             if (stateLast == TASK_STATE.STATE_GAME_START)       // proceed to update time remaining and score
             {
-                textTimeLeft.text = string.Format("{0:.2f} s", timeRemain);
+                textTimeLeft.text = string.Format("{0:F1} sec", timeRemain);
+                timeRemain -= intervalScoreboard; //(Time.fixedTime-timeLast);  //so what, it's nto time accurate
+                timeLast = Time.fixedTime;
 
                 //TODO compute similarity score
+
+                if (timeRemain <= 0) 
+                {
+                    timeRemain = 0.0f;
+                    SetTaskState(TASK_STATE.STATE_FINISH);
+                }
             }
             else {
-                textTimeLeft.text = "(game over)";
+                textTimeLeft.text = "Game Over";
             }
             // Yield execution of this coroutine and return to the main loop until next frame
             yield return new WaitForSeconds(intervalScoreboard);
@@ -235,8 +338,15 @@ public class TaskDoing : TaskInteractionBase {
 
     public void ReceiveButtonRelease(object o, string buttonName) 
     {
-        // do anything?        
-        Debug.LogWarning(string.Format("[TaskDoing]: {0} RELEASE (last state: {1})", buttonName, stateLast));
+        if (dictNextState.ContainsKey(buttonName))
+        {
+            TASK_STATE stateNew = dictNextState[buttonName];
+            SetTaskState(dictNextState[buttonName]);
+        }
+        else 
+        {
+            // do anything?        
+            Debug.LogWarning(string.Format("[TaskDoing]: {0} RELEASE but no state information! (last state: {1})", buttonName, stateLast));
+        }
     }
-
 }

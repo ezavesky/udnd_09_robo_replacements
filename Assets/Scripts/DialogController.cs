@@ -39,15 +39,14 @@ public class DialogController : MonoBehaviour
             {
                 List<string> nameParts = new List<string>(kvp.Key.Split('_'));
                 kvp.Value.name = kvp.Key;       // copy key into struct field
-                int idxKey = 0;
-                try 
+                //int idxKey = 0;
+                try                             // we don't use the result, but check that it has a valid number
                 {
-                    idxKey = int.Parse(nameParts[nameParts.Count-1]);
+                    int.Parse(nameParts[nameParts.Count-1]);
                     nameParts.RemoveAt(nameParts.Count-1);
                 }
                 catch 
                 {
-                    idxKey = 0;
                     Debug.Log(string.Format("[DialogController]: Parse for index failed on key '{0}'", kvp.Key));
                 }
                 string nameBase = string.Join("_", nameParts.ToArray());
@@ -109,7 +108,6 @@ public class DialogController : MonoBehaviour
         //  TODO: slide off screen via timer event
         bool bShow = false;
         float localAnimate = bUseDelay ? timeAnimate : 0.0f;
-        float[] floatTrans = {0.0f, 0.0f};
         if (uttNew != null)
         {
             //Debug.Log(string.Format("[DialogController]: UtteranceToggle '{1}' (from {0})", uttNew.name, uttNew.text));
@@ -178,9 +176,8 @@ public class DialogController : MonoBehaviour
         ToggleUtterance(null);
     }
 
-	private void UpdateUtterancePosition(float fPart, object objRaw) {
-		GameObject objDialogLocal = (GameObject)objRaw;
-        
+	private void UpdateUtterancePosition(float fPart, object objRaw) 
+    {
 		// rtTarget.rect.height = fVal;
         //float closePos = openPos - 0.5f*openHeight + 0.5f*closeHeight;
 		float closePos = openPos - 1.5f*openHeight;
@@ -258,8 +255,8 @@ public class DialogController : MonoBehaviour
             { "reading_option_confirmed_enter_2", new Utterance(null, 0.75f, "Um, okay. Sure. Please select: ") },
             { "reading_option_exit_0", new Utterance(null, 0.0f, "Congratulations, your story is now mandatory educational reading! Press 'go' to read it.") },
             { "reading_playback_stay_0", new Utterance(null, 0.0f, "") },
-            { "doing_intro_enter_0", new Utterance(null, 0.0f, "Please use your 'cooking skills' to emulate the synthesized food item. Press 'go' to continue or 'next' for another item.") },
-            { "doing_intro_enter_1", new Utterance(null, 0.7f, "Your task is to stack synthesized food items to match the target. Press 'go' to continue or 'next' for another item.") },
+            { "doing_intro_enter_0", new Utterance(null, 0.0f, "Use 'cooking skills' to emulate synthesized foods. Press 'go' to continue or 'next' for another item.") },
+            { "doing_intro_enter_1", new Utterance(null, 0.7f, "Stack synthesized food items to match the yummy target. Press 'go' to continue or 'next' for another item.") },
             { "doing_game_enter_0", new Utterance(null, 0.0f, "I will copy your actions and compute a match. Press 'done' if you finish before time runs out.") },
             { "doing_game_exit_0", new Utterance(null, 0.0f, "Your assembly task is done.  I will catalog your scores as evidence of human 'efficiency'.  Press 'restart' to try again.") },
             { "doing_game_exit_1", new Utterance(null, 0.5f, "Did that feel like forever to you, too? This 'achievement' was logged to your employment file. task is done. Press 'restart' to try again.") },

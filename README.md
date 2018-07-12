@@ -43,6 +43,7 @@ documented below.
 * [LeanTween package](https://assetstore.unity.com/packages/tools/animation/leantween-3595)
 * [simple camera model](https://assetstore.unity.com/packages/3d/props/electronics/free-pbr-security-camera-70061)
 * [food pack](https://assetstore.unity.com/packages/3d/props/food/free-food-pack-85884)
+* [plate](https://free3d.com/3d-model/plate--81292.html)
 
 ### Story Media
 * [reading task screen saver](https://www.youtube.com/watch?v=Fn44paKMX4E) derived from [this screen saver](https://www.screensaversplanet.com/screensavers/retro-sci-fi-522/)

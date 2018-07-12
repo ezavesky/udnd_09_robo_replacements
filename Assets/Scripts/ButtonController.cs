@@ -81,9 +81,12 @@ public class ButtonController : MonoBehaviour
         }
         else if (wasPressed)
         {
-            // Debug.Log(string.Format("[ButtonController]: RELEASE {3}, {0}, min {1}, max {2}", e.value, controllable.AtMinLimit(), controllable.AtMaxLimit(), buttonName));
-            OnReleased.Invoke(sender, buttonName);
-            wasPressed = false;
+            if (controllable.IsResting()) 
+            {
+                //Debug.Log(string.Format("[ButtonController]: RELEASE {3}, {0}, min {1}, max {2}, resting {4}", e.value, controllable.AtMinLimit(), controllable.AtMaxLimit(), buttonName, controllable.IsResting()));
+                OnReleased.Invoke(sender, buttonName);
+                wasPressed = false;
+            }
         }
         /*
         if (displayText != null)
