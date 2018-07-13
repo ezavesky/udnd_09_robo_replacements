@@ -6,22 +6,24 @@ This project is part of [Udacity](https://www.udacity.com "Udacity - Be in deman
 Extensive design, testing, and scope tracking is documented in [design docs](docs/design.pdf).  
 
 ### User Feedback
-User feedback was sampled both for individual design elements as well as longer play sessions.  Check out the design document for more verbose logging and discussion.
+User feedback was sampled both for individual design elements as well as longer play sessions.  Check out the [design docs](docs/design.pdf) for more verbose logging and discussion.
 
 ### Future Revisions
-TBD
+* Use of computer vision in seeing task for matching visual objects; using 2D companion app to compose
+* Additional gamification stickers/badges for competing in the different levels
+* Possibly additional content within each game (more food combos, more stories to tell, more shapes), but initial user feedback did not cite this as a shortcoming.
 
 ## Rubric Checks
-* **Animation (100)** - animation was incorporated for different robot movements; while the quality and diversity will be imroved, a starter for each station is in place.
-* **Lighting (100)** - where inuffficient with ambient lighting, real-time lamps were replicated and altered for hue; additioanlly, harnessing the directionality of the skybox a strong ambient light was created that has intersting shadow effects through windows.
-* **Locomotion (100)** - locomotion uses a combination of open teleporting along a main path through the output with specific regions of interest denoted with differently colored waypoints
-* **video (max 100)** - primarily used to motivate each task, background videos (open source) were opportunistically included; many static and moving image sources were utilized to enhance gameplay and lighten the mood!
+* **Animation (100)** - animation was incorporated for different robot movements; while the quality and diversity will be improved, a starter for each station is in place; robots within the seen were animated both with look-based IK as well as motion/aniation triggers throughout the level
+* **Lighting (100)** - where insuffficient with ambient lighting, real-time lamps were replicated and altered for hue; additioanlly, harnessing the directionality of the skybox a strong ambient light was created that has intersting shadow effects through windows.
+* **Locomotion (100)** - locomotion uses a combination of open teleporting along a main path through the output with specific regions of interest denoted with differently colored waypoints that will turn the user towards the location of primary action
+* **video (max 100)** - primarily used to motivate each task, background videos (open source) were opportunistically included; many static and moving image sources were utilized to enhance gameplay and lighten the mood; many custom objects were included
 * **gamification (250)** - there are three mini-games within the space: one to teach (doing task), one to listen (speech recognition+ story reading task), one to challenge the AI (seeing task).  The user can repeat each of them for a diferent gaming experience.  Additionally, unique dialog entries are randomly chosen throughout the user's interactions with the robots.
-* **Diegetic UI (250)** - where possible visuals and audio-based communication is given to the user; some text is still required, but attempts were made to condense them into short buttons
+* **Diegetic UI (250)** - where possible visuals and audio-based communication is given to the user; some text is still required, but attempts were made to condense them into short buttons (**non-text components are essential to gameplay**)
 * **storyline (250)** - a lightweight dialog manager was hand-created with region triggers to start and end conversation with robots at different tasks; different conversations can be triggered for the same point using a coarse probabilty + random number selection
-* **AI (250)** - a system for training and evaluating placement of blocks to guess visual patterns was implemented; a supplemental 2D learner application was created to help create training data for online models in the game
-* **speech recognition (500)**
-* **user testing (250)** - user testing was accomplished in two ways, early and quick user testing of individual ideas and visual concepts during design and implementation; a secondary, more complete test was also performed when siginificant milestones (like the completion of a task station); notes were taken along the way in the primary design document
+* **AI (250)** - a system for training and evaluating placement of blocks to guess visual patterns was implemented -- due to timing this was not hooked into the main VR experience -- instead, only a supplemental 2D learner application was created to help create training data for online models in the game; agin though the models were not completed. (**30% completed**)
+* **speech recognition (500)** - speech recongition was investigated but it could not be hooked in for streaming in such a short amount of time (**not completed**)
+* **user testing (250)** - user testing was accomplished in two ways, early and quick user testing of individual ideas and visual concepts during design and implementation; a secondary, more complete test was also performed when siginificant milestones (like the completion of a task station); notes were taken along the way in the primary design document  (**evaluation and improvements included**)
 
 
 ## Walkthrough
@@ -32,6 +34,7 @@ included below.
 Some assets were used from the open source community and are
 documented below.
 
+### Environment and objects
 * [Asteroids package](https://assetstore.unity.com/packages/3d/props/asteroid-pack-by-pixel-make-83951)
 * [Sci-Fi Environment](https://assetstore.unity.com/packages/3d/environments/sci-fi/sci-fi-styled-modular-pack-82913)
 * [toon robot](https://assetstore.unity.com/packages/3d/characters/robots/sleek-toon-bot-free-34490)
@@ -48,6 +51,8 @@ documented below.
 * [graduation hat](https://free3d.com/3d-model/graduation-hat-97228.html)
 
 ### Story Media
+Specifically, in this section these (mostly image assets) were utilized for parts of the reading/listening task as background images that would be visualized on the robot's working terminal.
+
 * [reading task screen saver](https://www.youtube.com/watch?v=Fn44paKMX4E) derived from [this screen saver](https://www.screensaversplanet.com/screensavers/retro-sci-fi-522/)
 * [training messages](https://www.pexels.com/photo/group-of-people-holding-message-boards-1059116/)
 * [monkey in mirror](https://www.pexels.com/photo/closeup-photo-of-primate-1207875/)
@@ -80,5 +85,7 @@ documented below.
 * [tooth brush](https://www.pexels.com/photo/clean-mouth-teeth-dentist-40798/)
 
 ### Versions
-- Unity 2017.2.0f3
+* Unity 2017.2.0f3
+* Tested on Oculus RIFT and HTC Vive
+* Leverages VRTK 3.3 for controller normalization (and testing) in Unity
 
