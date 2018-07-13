@@ -250,6 +250,9 @@ public class DialogController : MonoBehaviour
             { "doing_exit_0", new Utterance(null, 0.0f, "No problem. I will prepare tonight's meal from space worms and purified gray water!") }, 
             { "seeing_enter_0", new Utterance(null, 0.0f, "As your world's future architect, I must learn about 'circles'. Can you help?") }, 
             { "seeing_enter_1", new Utterance(null, 0.3f, "As a simulator, I could add quite well. I compute that's the same as building a bridge. Can you help?") }, 
+            { "seeing_enter_2", new Utterance(null, 0.6f, "If you can hold things and stick them to other things, have I got a job for you. Can you help?") },
+            { "seeing_exit_0", new Utterance(null, 0.0f, "What's the matter, haven't you seen a painting of snow before? Please join our imaginoids today!") },
+            { "seeing_exit_1", new Utterance(null, 0.5f, "I think you came a little early, this task doesn't look done yet? Come back later?") },
             { "reading_enter_0", new Utterance(null, 0.0f, "I am writing the next best selling novel. It must have 'words'. Can you help?") }, 
             { "reading_exit_0", new Utterance(null, 0.0f, "Thanks, but no thanks. These books write themselves now anyway.") }, 
             { "reading_training_enter_0", new Utterance(null, 0.0f, "You will choose words using the selection buttons on your left to fine-tune my template generated stories. Ready to go?") },
@@ -272,9 +275,6 @@ public class DialogController : MonoBehaviour
             { "circle_enter_0", new Utterance(null, 0.0f, "Have you ever had the feeling that you're caught in an endless loop?") },
             { "circle_enter_1", new Utterance(null, 0.5f, "Uh oh, my stopping criterion are ill defined. I guess I'll chase that pointer.") },
             { "circle_exit_0", new Utterance(null, 0.0f, "See you soon! This place isn't that big and we sent your ship home for the night!") },
-            { "seeing_enter_2", new Utterance(null, 0.6f, "If you can hold things and stick them to other things, have I got a job for you. Can you help?") },
-            { "seeing_enter_3", new Utterance(null, 0.9f, "What's the matter, haven't you seen a painting of snow before? Please join our imaginoids today!") },
-            { "seeing_enter_4", new Utterance(null, 0.95f, "I think you came a little early, this task doesn't look done yet? Come back later?") },
         };
         //go through and load actual clip
         foreach (KeyValuePair<string,Utterance> kvp in DICT_UTTERANCE)

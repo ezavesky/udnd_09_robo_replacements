@@ -16,6 +16,10 @@ public class IKControl : MonoBehaviour
     public Transform rightHandObj = null;
     public Transform leftHandObj = null;
 
+    public Transform sentryA = null;
+    public Transform sentryB = null;
+    public string sentryState = "walk";
+
     void Awake () 
     {
         animator = GetComponent<Animator>();
@@ -58,10 +62,24 @@ public class IKControl : MonoBehaviour
             {
                 animator.SetLookAtWeight(weightLookObject);
                 animator.SetLookAtPosition(transTarget.position);
-            }  
+            } 
+
+            // finally, execute our sentry routine (alternate between two points)
+            if (sentryA!=null && sentryB!=null)
+            {
+                
+
+
+
+
+            }
+
 
         }
-        
-    }    
+    } 
+
+
+
+
 }
 
