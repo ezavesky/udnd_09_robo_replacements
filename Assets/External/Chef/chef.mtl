@@ -1,0 +1,20 @@
+# Material file for chef.obj
+
+newmtl chef_decal
+	Ns 0
+	d 1
+	illum 2
+	Kd 0.8 0.8 0.8
+	Ks 0.0 0.0 0.0
+	Ka 0.2 0.2 0.2
+	map_Kd Tex_0121_1.png
+
+newmtl chef_body
+	Ns 0
+	d 1
+	illum 2
+	Kd 0.8 0.8 0.8
+	Ks 0.0 0.0 0.0
+	Ka 0.2 0.2 0.2
+	map_Kd Tex_0122_2.png
+

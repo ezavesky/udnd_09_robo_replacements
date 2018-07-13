@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using VRTK;
 
 public class TaskDoing : TaskInteractionBase {
     public ButtonController buttonA;
@@ -14,6 +15,8 @@ public class TaskDoing : TaskInteractionBase {
     protected float intervalScoreboard = 0.5f;
     protected float timeGame = 120.0f;
     protected float timeRemain = 0.0f;
+    protected float matchScore = 0.0f;
+    protected float biasDistance = 1.0f;    //closer to 1 is distance, closer to 0 is rotation-based
 
     public Transform rootPlateReference;
     public Transform rootPlatePlayer;
@@ -25,11 +28,11 @@ public class TaskDoing : TaskInteractionBase {
     protected List<GameObject> listFoods = new List<GameObject>();
     public GameObject rootAnimationFreeze = null;
 
-    public GameObject objLeftGrab = null;
-    public GameObject objRightGrab = null;
+    protected GameObject objLeftGrab = null;
+    protected GameObject objRightGrab = null;
     
     protected int idxPrefabActive = 0;
-    protected Dictionary<int, GameObject> dictObjectPair = new Dictionary<int, GameObject>();
+    protected Dictionary<int, GameObject> dictObjectRobot = new Dictionary<int, GameObject>();
     protected Dictionary<int, GameObject> dictObjectReference = new Dictionary<int, GameObject>();
     protected Dictionary<int, List<GameObject>> dictPrefabSets = new Dictionary<int, List<GameObject>>();
 
@@ -142,7 +145,8 @@ public class TaskDoing : TaskInteractionBase {
         }
         if (idxPrefab >= listFoods.Count)  //check bounds
             return;
-        listFoods[idxPrefab].SetActive(stateNew==PREFAB_STATE.ACTIVE);
+
+        listFoods[idxPrefab].SetActive(stateNew!=PREFAB_STATE.INACTIVE);    //activate/deactivate main display
         foreach (GameObject objClone in dictPrefabSets[idxPrefab])  //disable all objects for this prefab
         {
             if (stateNew==PREFAB_STATE.INACTIVE)
@@ -151,28 +155,22 @@ public class TaskDoing : TaskInteractionBase {
             }
             else    //activating, so we need to check if player or robot 
             {
-                if (dictObjectPair.ContainsKey(objClone.GetInstanceID()))       //has instance match, it's player object
+                if (dictObjectRobot.ContainsKey(objClone.GetInstanceID()))       //has instance match, it's player object
                 {
+                    rb = objClone.GetComponent<Rigidbody>();
+                    rb.isKinematic = (stateNew!=PREFAB_STATE.ACTIVE);                        
                     if (stateNew==PREFAB_STATE.ACTIVE)
                     {
                         objClone.transform.position = rootResourcesPlayer.position;
                     }
-                    else 
-                    {
-                        rb = objClone.GetComponent<Rigidbody>();
-                        rb.isKinematic = true;                        
-                    }
                 }
                 else
                 {
+                    rb = objClone.GetComponent<Rigidbody>();
+                    rb.isKinematic = (stateNew!=PREFAB_STATE.ACTIVE);                        
                     if (stateNew==PREFAB_STATE.ACTIVE)
                     {
                         objClone.transform.position = rootResourcesRobot.position;
-                    }
-                    else 
-                    {
-                        rb = objClone.GetComponent<Rigidbody>();
-                        rb.isKinematic = true;                        
                     }
                 }
                 objClone.SetActive(true);   // let object fall into basket from anchor
@@ -205,16 +203,17 @@ public class TaskDoing : TaskInteractionBase {
 
         GameObject objSource = null;
         GameObject objFoodBase = null;
-        GameObject newPlayerHandle = null;
-        GameObject newRobotHandle = null;
+        GameObject[] newObjs = new GameObject[2];
         Rigidbody rb = null;
-        
-        for (int i=0; i<objFoodSource.transform.GetChildCount(); i++) 
+        VRTK.VRTK_InteractableObject apiInteract;
+        int i, j, k;
+
+        for (i=0; i<objFoodSource.transform.GetChildCount(); i++) 
         {
             objFoodBase = objFoodSource.transform.GetChild(i).gameObject;
             listFoods.Add(objFoodBase);
             dictPrefabSets[i] = new List<GameObject>();
-            for (int j=0; j<objFoodBase.transform.childCount; j++)
+            for (j=0; j<objFoodBase.transform.childCount; j++)
             {
                 objSource = objFoodBase.transform.GetChild(j).gameObject;
                 rb = objSource.GetComponent<Rigidbody>();
@@ -223,53 +222,90 @@ public class TaskDoing : TaskInteractionBase {
                     rb.isKinematic = true;
                 }
 
-                newPlayerHandle = Instantiate(objSource);
-                newPlayerHandle.SetActive(false);
-                newPlayerHandle.transform.parent = cloneRoot.transform;
-                newPlayerHandle.isStatic = false;
-                rb = newPlayerHandle.GetComponent<Rigidbody>();
-                if (rb) 
+                for (k=0; k<2; k++)
                 {
-                    rb.isKinematic = false;
-                    rb.velocity = Vector3.zero;
-                    rb.angularVelocity = Vector3.zero;
-                }
-                newRobotHandle = Instantiate(objSource);
-                newRobotHandle.SetActive(false);
-                newRobotHandle.transform.parent = cloneRoot.transform;
-                newRobotHandle.isStatic = false;
-                rb = newRobotHandle.GetComponent<Rigidbody>();
-                if (rb) 
-                {
-                    rb.isKinematic = false;
-                    rb.velocity = Vector3.zero;
-                    rb.angularVelocity = Vector3.zero;
+                    newObjs[k] = Instantiate(objSource);
+                    newObjs[k].SetActive(false);
+                    newObjs[k].transform.parent = cloneRoot.transform;
+                    newObjs[k].isStatic = false;
+                    rb = newObjs[k].GetComponent<Rigidbody>();
+                    if (rb) 
+                    {
+                        rb.isKinematic = false;
+                        rb.velocity = Vector3.zero;
+                        rb.angularVelocity = Vector3.zero;
+                    }
+                    dictPrefabSets[i].Add(newObjs[k]);     //save in list for easy retrieval
                 }
 
-                dictPrefabSets[i].Add(newPlayerHandle);     //save in list for easy retrieval
-                dictPrefabSets[i].Add(newRobotHandle);
-                dictObjectReference[objSource.GetInstanceID()] = newPlayerHandle;   //establish link to reference object
-                dictObjectPair[newPlayerHandle.GetInstanceID()] = newRobotHandle;   //establish link to robot object
+                // only on the object htat the user is touching (item 0)
+                newObjs[0].AddComponent(typeof(VRTK.VRTK_InteractableObject));
+                apiInteract = newObjs[0].GetComponent<VRTK_InteractableObject>();
+                if (apiInteract)
+                {
+                    apiInteract.isGrabbable = true;
+                    apiInteract.InteractableObjectGrabbed += new InteractableObjectEventHandler(OnInteractableObjectGrabbed);
+                    apiInteract.InteractableObjectUngrabbed += new InteractableObjectEventHandler(OnInteractableObjectUnGrabbed);
+                }
+
+                dictObjectReference[objSource.GetInstanceID()] = newObjs[0];   //establish link to reference object
+                dictObjectRobot[newObjs[0].GetInstanceID()] = newObjs[1];   //establish link to robot object
             }
             objFoodBase.SetActive(false);
         }
     }
 
-    // TODO : specific for doing task
-
-    // method to switch to tracking food object in person's hands
-
     // method to switch to tracking food object in robot's hands
+    protected void UpdateMirroredPosition(GameObject objTarget) 
+    {
+        // find reference to the grabbed object and move it
+        if (objTarget==null || !dictObjectRobot.ContainsKey(objTarget.GetInstanceID()))
+        {
+            return;
+        }
+        // at this point, robot should be tracking this object, so we don't need to add it again...
+        GameObject objTracking = dictObjectRobot[objTarget.GetInstanceID()];
+        
+        // just smoothly transition the object to its new position...
+        //      move point out of reference from 
+        // Vector3 ptNew = objTracking.transform.InverseTransformPoint(
+        //     objTracking.transform.TransformPoint(objTracking.transform.localPosition)
+        //     - rootPlateRobot.transform.TransformPoint(rootPlateRobot.transform.localPosition)
+        //     + (objTarget.transform.TransformPoint(objTarget.transform.localPosition)
+        //     - rootPlatePlayer.transform.TransformPoint(rootPlatePlayer.transform.localPosition)) );
+        // objTracking.transform.localPosition = ptNew;
 
+        //METHOD 1: it offsets to the right place, but the X/Y and X/Z directions aren't right because
+        //          the robot's table is rotated
+        Vector3 ptNew = rootPlateRobot.transform.position
+                             + (objTarget.transform.position - rootPlatePlayer.transform.position);
 
+        // METHOD 2: comptue the offset, but sneak in as local position; rotate transform then retrieve new position
+        // Transform transTurn = rootPlatePlayer.transform;
+        // transTurn.localPosition = (objTarget.transform.position - rootPlatePlayer.transform.position);
+        // transTurn.eulerAngles = rootPlateRobot.eulerAngles;
+        // Vector3 ptNew = transTurn.localPosition + rootPlateRobot.position;
 
-    protected float ComputeMatch(float weightDistance, float weightAngle)  
+        Debug.Log(string.Format("[TaskDoing]: Move from {0} to new {1}; source {2}", objTracking.transform.position, ptNew, objTarget.transform.position));
+        objTracking.transform.position = ptNew;
+
+        // ptRef = objRef.transform.TransformDirection(objRef.transform.eulerAngles)
+        //         - rootPlatePlayer.transform.TransformDirection(rootPlateReference.transform.eulerAngles);
+
+        // update equivalent robot hand to track along with look
+        // move object around in space, updating robot 
+
+    }
+
+    protected float ComputeMatch(float biasDistance = 1.0f)  
     {
         //method to compute distance and rotation from reference/user items
         float userDist = 0f;
         float userAngle = 0f;
+        float localDist = 0f;
         GameObject objRef = null;
         GameObject objCompare = null;
+        Vector3 ptPlayer, ptRef;
 
         //foreach item in the reference
         for (int i=0; i < listFoods[idxPrefabActive].transform.GetChildCount(); i++)
@@ -281,30 +317,55 @@ public class TaskDoing : TaskInteractionBase {
             }
             else {
                 objCompare = dictObjectReference[objRef.GetInstanceID()];
+                
                 //  compute the position (plate normalized) differences
-                //  compute the angular differences
+                ptRef = objRef.transform.position - rootPlateReference.transform.position;
+                ptPlayer = objCompare.transform.position - rootPlatePlayer.transform.position;
+                localDist = Vector3.Distance(ptPlayer, ptRef);
+                // Debug.Log(string.Format("[TaskDoing]: PTS {3} @ {0} - REF {1}, PLAYER {2}", objRef.GetInstanceID(), ptRef, ptPlayer, localDist));
+                userDist += localDist;
 
+                //  compute the angular differences
+                // ptRef = objRef.transform.TransformDirection(objRef.transform.localEulerAngles)
+                //         - rootPlatePlayer.transform.TransformDirection(rootPlateReference.transform.localEulerAngles);
+                // ptPlayer = objCompare.transform.TransformDirection(objCompare.transform.localEulerAngles)
+                //         - rootPlateReference.transform.TransformDirection(rootPlateReference.transform.localEulerAngles);
+                // Debug.Log(string.Format("[TaskDoing]: ANG {3} @ {0} - REF {1}, PLAYER {2}", objRef.GetInstanceID(), ptRef, ptPlayer, localDist));
+                userAngle += Vector3.Distance(ptPlayer, ptRef);
             }
         }
 
         //return the weighted total of user components
-        return (userDist * weightDistance) + (userAngle * weightAngle);
+        float distCombined = (userDist * biasDistance) + (userAngle * (1-biasDistance));
+
+        // TODO: some normalization scheme to get to 0-1 position
+        return distCombined;
     }
 
 
     //every so often update joke panel with new text
     IEnumerator ScoreboardUpdate()
     {
-        float timeLast = Time.fixedTime;
         while (true)
         {
             if (stateLast == TASK_STATE.STATE_GAME_START)       // proceed to update time remaining and score
             {
                 textTimeLeft.text = string.Format("{0:F1} sec", timeRemain);
-                timeRemain -= intervalScoreboard; //(Time.fixedTime-timeLast);  //so what, it's nto time accurate
-                timeLast = Time.fixedTime;
-
-                //TODO compute similarity score
+                //timeRemain -= intervalScoreboard; //(Time.fixedTime-timeLast);  //so what, it's nto time accurate
+                
+                // compute similarity score within local variable
+                matchScore = ComputeMatch(biasDistance);
+                textAccuracy.text = string.Format("{0:F1} %", matchScore*100.0f);
+                
+                // if there is a right or left object available, track it
+                if (objLeftGrab)
+                {
+                    UpdateMirroredPosition(objLeftGrab);
+                }
+                if (objRightGrab)
+                {
+                    UpdateMirroredPosition(objLeftGrab);
+                }
 
                 if (timeRemain <= 0) 
                 {
@@ -349,4 +410,56 @@ public class TaskDoing : TaskInteractionBase {
             Debug.LogWarning(string.Format("[TaskDoing]: {0} RELEASE but no state information! (last state: {1})", buttonName, stateLast));
         }
     }
+
+    protected void OnInteractableObjectGrabbed(object o, InteractableObjectEventArgs args)
+    {
+        VRTK_InteractableObject api = (VRTK_InteractableObject)o;
+
+        if (dictObjectRobot.ContainsKey(api.gameObject.GetInstanceID())) 
+        {
+            GameObject objCompare = dictObjectRobot[api.gameObject.GetInstanceID()];
+            if (VRTK_DeviceFinder.IsControllerLeftHand(args.interactingObject))
+            {
+                if (ikControl)
+                {
+                    ikControl.leftHandObj = objCompare.transform;
+                    objLeftGrab = api.gameObject;
+                }
+            }
+            else if (VRTK_DeviceFinder.IsControllerRightHand(args.interactingObject))
+            {
+                if (ikControl)
+                {
+                    ikControl.rightHandObj = objCompare.transform;
+                    objRightGrab = api.gameObject;
+                }
+            }
+        }
+        // Debug.Log(string.Format("[TaskDoing]: Grabbed {0} ", api.gameObject.name));
+        UpdateMirroredPosition(api.gameObject);
+    }
+    protected void OnInteractableObjectUnGrabbed(object o, InteractableObjectEventArgs args)
+    {
+        VRTK_InteractableObject api = (VRTK_InteractableObject)o;
+
+        UpdateMirroredPosition(api.gameObject);     // run last update
+        if (VRTK_DeviceFinder.IsControllerLeftHand(args.interactingObject))
+        {
+            if (ikControl)
+            {
+                ikControl.leftHandObj = null;
+                objLeftGrab = null;
+            }
+        }
+        else if (VRTK_DeviceFinder.IsControllerRightHand(args.interactingObject))
+        {
+            if (ikControl)
+            {
+                ikControl.rightHandObj = null;
+                objLeftGrab = null;
+            }
+        }
+        // Debug.Log(string.Format("[TaskDoing]: UnGrabbed {0} ", api.gameObject.name));
+    }
+
 }

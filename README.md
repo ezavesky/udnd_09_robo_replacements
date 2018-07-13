@@ -44,6 +44,8 @@ documented below.
 * [simple camera model](https://assetstore.unity.com/packages/3d/props/electronics/free-pbr-security-camera-70061)
 * [food pack](https://assetstore.unity.com/packages/3d/props/food/free-food-pack-85884)
 * [plate](https://free3d.com/3d-model/plate--81292.html)
+* [chefs hat](https://www.models-resource.com/xbox_360/avatarmarketplace/model/18699/)
+* [graduation hat](https://free3d.com/3d-model/graduation-hat-97228.html)
 
 ### Story Media
 * [reading task screen saver](https://www.youtube.com/watch?v=Fn44paKMX4E) derived from [this screen saver](https://www.screensaversplanet.com/screensavers/retro-sci-fi-522/)
