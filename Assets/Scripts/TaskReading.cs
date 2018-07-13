@@ -135,7 +135,7 @@ public class TaskReading : TaskInteractionBase
                     storyActive = null;
                     foreach (KeyValuePair<string, StoryExample> kvp in TaskReading.DICT_STORY_EX)
                     {
-                        if (!dictStoryComplete.ContainsKey(kvp.Key) || string.IsNullOrEmpty(storyActive))   // start somewhere
+                        if (string.IsNullOrEmpty(storyActive))   // start somewhere
                         {
                             storyActive = kvp.Key;
                         }
@@ -143,10 +143,6 @@ public class TaskReading : TaskInteractionBase
                         {
                             storyActive = kvp.Key;
                         }
-                    }
-                    if (!dictStoryComplete.ContainsKey(storyActive))
-                    {
-                        dictStoryComplete[storyActive] = 0;
                     }
                     dictStoryComplete[storyActive] += 1;
                     listAnswers.Clear();
@@ -537,6 +533,12 @@ public class TaskReading : TaskInteractionBase
             },  //end a story
 
         };  //end dictionary init
+
+        foreach (KeyValuePair<string, StoryExample> kvp in TaskReading.DICT_STORY_EX)
+        {
+            dictStoryComplete[kvp.Key] = 0;
+        }
+
 
     }   //end load function
 

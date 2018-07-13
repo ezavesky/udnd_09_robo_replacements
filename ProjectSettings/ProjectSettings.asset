@@ -12,7 +12,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: EricZavesky
-  productName: Learning2D
+  productName: RoboReplacements
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -159,7 +159,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.Company.ProductName
-    Standalone: com.EricZavesky.Learning2D
+    Standalone: com.EricZavesky.RoboReplacements
     Tizen: com.Company.ProductName
     iOS: com.Company.ProductName
     tvOS: com.Company.ProductName
@@ -210,7 +210,6 @@ PlayerSettings:
   tvOSSmallIconLayers: []
   tvOSSmallIconLayers2x: []
   tvOSLargeIconLayers: []
-  tvOSLargeIconLayers2x: []
   tvOSTopShelfImageLayers: []
   tvOSTopShelfImageLayers2x: []
   tvOSTopShelfImageWideLayers: []
@@ -277,8 +276,8 @@ PlayerSettings:
     m_Enabled: 1
     m_Devices:
     - None
-    - Oculus
     - OpenVR
+    - Oculus
   - m_BuildTarget: iOS
     m_Enabled: 0
     m_Devices: []
@@ -700,6 +699,7 @@ PlayerSettings:
   XboxOneSplashScreen: {fileID: 0}
   XboxOneAllowedProductIds: []
   XboxOnePersistentLocalStorageSize: 0
+  XboxOneXTitleMemory: 8
   xboxOneScriptCompiler: 0
   vrEditorSettings:
     daydream:

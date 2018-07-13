@@ -29,7 +29,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1144473408628556
 GameObject:
   m_ObjectHideFlags: 1
@@ -41,7 +41,6 @@ GameObject:
   - component: {fileID: 33469832225360606}
   - component: {fileID: 65384516230103616}
   - component: {fileID: 23547423776091138}
-  - component: {fileID: 54985632932947872}
   m_Layer: 0
   m_Name: RightWall
   m_TagString: Untagged
@@ -142,7 +141,6 @@ GameObject:
   - component: {fileID: 33935357507411490}
   - component: {fileID: 65735379288441944}
   - component: {fileID: 23488193783321738}
-  - component: {fileID: 54528151370098874}
   m_Layer: 0
   m_Name: LeftWall
   m_TagString: Untagged
@@ -168,7 +166,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1527809888752500
 GameObject:
   m_ObjectHideFlags: 1
@@ -180,7 +178,6 @@ GameObject:
   - component: {fileID: 33959990907184256}
   - component: {fileID: 65895455718643654}
   - component: {fileID: 23606896836404912}
-  - component: {fileID: 54538796236229436}
   m_Layer: 0
   m_Name: FrontWall
   m_TagString: Untagged
@@ -199,7 +196,6 @@ GameObject:
   - component: {fileID: 33271453348771190}
   - component: {fileID: 65935900944696926}
   - component: {fileID: 23572392919933436}
-  - component: {fileID: 54995953946158686}
   m_Layer: 0
   m_Name: BackWall
   m_TagString: Untagged
@@ -701,36 +697,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!54 &54528151370098874
-Rigidbody:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1392041684938776}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
---- !u!54 &54538796236229436
-Rigidbody:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1527809888752500}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!54 &54673971242728668
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -761,36 +727,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 2
---- !u!54 &54985632932947872
-Rigidbody:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1144473408628556}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
---- !u!54 &54995953946158686
-Rigidbody:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1605655915845032}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!65 &65098619288368448
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -823,7 +759,7 @@ BoxCollider:
   m_GameObject: {fileID: 1144473408628556}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -847,7 +783,7 @@ BoxCollider:
   m_GameObject: {fileID: 1392041684938776}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -859,7 +795,7 @@ BoxCollider:
   m_GameObject: {fileID: 1527809888752500}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -871,7 +807,7 @@ BoxCollider:
   m_GameObject: {fileID: 1605655915845032}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -989,7 +925,7 @@ MonoBehaviour:
   restingPosition: 0
   restingPositionThreshold: 0.01
   positionTarget: 0.1
-  targetForce: 5
+  targetForce: 100
 --- !u!222 &222115073063638312
 CanvasRenderer:
   m_ObjectHideFlags: 1

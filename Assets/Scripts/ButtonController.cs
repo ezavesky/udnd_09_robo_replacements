@@ -58,11 +58,13 @@ public class ButtonController : MonoBehaviour
         controllable = GetComponentInChildren<VRTK.Controllables.VRTK_BaseControllable>();
         if (controllable)
         {
+            /*
             Rigidbody rb = controllable.gameObject.GetComponent<Rigidbody>();
             if (rb)     // forcibly update the rigid body
             {
                 rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
             }
+            */
             controllable.ValueChanged += ValueChanged;
         }
         displayText = GetComponentInChildren<Text>();

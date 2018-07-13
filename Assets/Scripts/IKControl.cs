@@ -30,7 +30,7 @@ public class IKControl : MonoBehaviour
     //a callback for calculating IK
     void OnAnimatorIK()
     {
-        if(animator && ikActive) 
+        if(animator && ikActive && Camera.main!=null) 
         {
             Transform transTarget = lookObj;
 

@@ -5,6 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Learning2D.unity
     guid: 4f084588b84f34f6e86481e65a0c520d
+  - enabled: 1
+    path: Assets/Scenes/VRBase.unity
+    guid: f4ea430018b3240e28417a4ef60dcd35
+  - enabled: 1
+    path: Assets/Scenes/SpaceOutpost.unity
+    guid: b42ca4c5c936383429d2318c931f7ad2
