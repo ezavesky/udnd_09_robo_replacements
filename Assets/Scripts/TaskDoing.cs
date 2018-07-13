@@ -314,7 +314,6 @@ public class TaskDoing : TaskInteractionBase {
         float localDist = 0f;
         GameObject objRef = null;
         GameObject objCompare = null;
-        Vector3 ptPlayer, ptRef;
 
         //foreach item in the reference
         for (int i=0; i < listFoods[idxPrefabActive].transform.childCount; i++)
