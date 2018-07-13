@@ -13,10 +13,10 @@ public class TaskDoing : TaskInteractionBase {
     public Text textTimeLeft;
     public Text textAccuracy;
     protected float intervalScoreboard = 0.5f;
-    protected float timeGame = 120.0f;
+    protected float timeGame = 60.0f;
     protected float timeRemain = 0.0f;
     protected float matchScore = 0.0f;
-    protected float biasDistance = 0.8f;    //closer to 1 is distance, closer to 0 is rotation-based
+    protected float biasDistance = 0.95f;    //closer to 1 is distance, closer to 0 is rotation-based
 
     public Transform rootPlateReference;
     public Transform rootPlatePlayer;
@@ -28,6 +28,7 @@ public class TaskDoing : TaskInteractionBase {
     public GameObject objFoodSource;
     protected List<GameObject> listFoods = new List<GameObject>();
     public GameObject rootAnimationFreeze = null;
+    public AudioClip clipTimeup = null;
 
     protected GameObject objLeftGrab = null;
     protected GameObject objRightGrab = null;
@@ -37,7 +38,7 @@ public class TaskDoing : TaskInteractionBase {
     protected Dictionary<int, GameObject> dictObjectReference = new Dictionary<int, GameObject>();
     protected Dictionary<int, List<GameObject>> dictPrefabSets = new Dictionary<int, List<GameObject>>();
 
-    protected enum TASK_STATE { STATE_RESET, STATE_START, STATE_START_NEXT, STATE_GAME_START, STATE_PIECE, STATE_FINISH };
+    protected enum TASK_STATE { RESET, START, START_NEXT, GAME_START, GAME_RESET, PIECE, FINISH };
     protected Dictionary<string, TASK_STATE> dictNextState = new Dictionary<string, TASK_STATE>();
     protected TASK_STATE stateLast;
 
@@ -62,20 +63,23 @@ public class TaskDoing : TaskInteractionBase {
 
     public override void Start()
     {
-        SetTaskState(TASK_STATE.STATE_RESET);
+        SetTaskState(TASK_STATE.RESET);
+        idxPrefabActive = GameManager.instance.rand.Next(listFoods.Count);  // different starter food
     }
 
     protected void SetTaskState(TASK_STATE stateNew)
     {
+        bool ranNested = false;
+
         //init buttons to just show start
         switch(stateNew) 
         {
             default:
                 Debug.LogError(string.Format("[TaskReading]: Life-systems restarting! State {0} received, but unexpected!", stateNew));
-                SetTaskState(TASK_STATE.STATE_START_NEXT);
+                SetTaskState(TASK_STATE.START_NEXT);
                 return;
 
-            case TASK_STATE.STATE_RESET:
+            case TASK_STATE.RESET:
                 buttonA.buttonEnabled = buttonB.buttonEnabled = false;
                 textAccuracy.text = "";
                 textTimeLeft.text = "";
@@ -83,36 +87,46 @@ public class TaskDoing : TaskInteractionBase {
                 dictNextState.Clear();
                 break;
 
-            case TASK_STATE.STATE_START_NEXT:
+            case TASK_STATE.START_NEXT:
                 ActivatePrefabSet(idxPrefabActive, PREFAB_STATE.INACTIVE);
                 idxPrefabActive = (idxPrefabActive + 1) % listFoods.Count;
-                goto case TASK_STATE.STATE_START;    //fall through
+                goto case TASK_STATE.START;    //fall through
 
-            case TASK_STATE.STATE_START:
+            case TASK_STATE.START:
                 listFoods[idxPrefabActive].SetActive(true);
                 ChildrenSetActive(rootAnimationFreeze.transform, true);     //activate cameras, lazy susan
                 buttonA.buttonName = "Next";
-                dictNextState[buttonA.buttonName] = TASK_STATE.STATE_START_NEXT;
+                dictNextState[buttonA.buttonName] = TASK_STATE.START_NEXT;
                 buttonB.buttonName = "Go";
-                dictNextState[buttonB.buttonName] = TASK_STATE.STATE_GAME_START;
+                dictNextState[buttonB.buttonName] = TASK_STATE.GAME_START;
                 buttonA.buttonEnabled = buttonB.buttonEnabled = true;
                 textHelp.text = GameManager.instance.DialogTrigger("doing_intro", DialogTrigger.TRIGGER_TYPE.TRIGGER_ENTER);
                 break;                
 
-            case TASK_STATE.STATE_GAME_START:
+            case TASK_STATE.GAME_RESET:
+                ActivatePrefabSet(idxPrefabActive, PREFAB_STATE.ACTIVE);
+                textHelp.text = GameManager.instance.DialogTrigger("doing_game", DialogTrigger.TRIGGER_TYPE.TRIGGER_ENTER);
+                ranNested = true;
+                goto case TASK_STATE.GAME_START;
+
+            case TASK_STATE.GAME_START:
                 ActivatePrefabSet(idxPrefabActive, PREFAB_STATE.ACTIVE);
                 buttonB.buttonName = "Done!";
-                dictNextState[buttonB.buttonName] = TASK_STATE.STATE_FINISH;
-                buttonA.buttonEnabled = false;
-                buttonB.buttonEnabled = true;
-                timeRemain = timeGame;
-                textHelp.text = GameManager.instance.DialogTrigger("doing_game", DialogTrigger.TRIGGER_TYPE.TRIGGER_ENTER);
+                dictNextState[buttonB.buttonName] = TASK_STATE.FINISH;
+                buttonA.buttonName = "Reset Food";
+                dictNextState[buttonA.buttonName] = TASK_STATE.GAME_RESET;
+                buttonA.buttonEnabled = buttonB.buttonEnabled = true;
+                if (!ranNested)
+                {
+                    timeRemain = timeGame;
+                    textHelp.text = GameManager.instance.DialogTrigger("doing_game", DialogTrigger.TRIGGER_TYPE.TRIGGER_ENTER);
+                }
                 Invoke("StabalizePrefabs", 1.0f);     // delay for correct op
                 break;                
 
-            case TASK_STATE.STATE_FINISH:
-                buttonB.buttonName = "Restart";
-                dictNextState[buttonB.buttonName] = TASK_STATE.STATE_START;
+            case TASK_STATE.FINISH:
+                buttonB.buttonName = "Again!";
+                dictNextState[buttonB.buttonName] = TASK_STATE.START;
                 buttonA.buttonEnabled = false;
                 buttonB.buttonEnabled = true;
                 
@@ -330,11 +344,11 @@ public class TaskDoing : TaskInteractionBase {
 
         // h(x) = Min(Max(0,(2^(-x/100+8))/300), 100)
         //      good distance function
-        // http://www.wolframalpha.com/input/?x=0&y=0&i=h(x)+%3D+2%5E(-x%2F100%2B8) - plot example
+        // http://www.wolframalpha.com/input/?x=0&y=0&i=h(x)+%3D+2%5E(-x%2B8) - plot example
 
         // some normalization scheme to get to 0-1 position
-        float matchNorm = 1 - Mathf.Min(Mathf.Max(0,Mathf.Pow(2,(-distCombined+8))), 1);
-        //Debug.Log(string.Format("[TaskDoing]: Dist {0}, Angle {1}, Combined {2}, Norm {3}", userDist, userAngle, distCombined, matchNorm));
+        float matchNorm = 1.0f - Mathf.Min(Mathf.Max(0,Mathf.Pow(2,(-distCombined+8))/250), 1);
+        // Debug.Log(string.Format("[TaskDoing]: Dist {0}, Angle {1}, Combined {2}, Norm {3}", userDist, userAngle, distCombined, matchNorm));
         return matchNorm;
     }
 
@@ -344,10 +358,11 @@ public class TaskDoing : TaskInteractionBase {
     {
         while (true)
         {
-            if (stateLast == TASK_STATE.STATE_GAME_START)       // proceed to update time remaining and score
+            // proceed to update time remaining and score
+            if (stateLast == TASK_STATE.GAME_START || stateLast == TASK_STATE.GAME_RESET)
             {
                 textTimeLeft.text = string.Format("{0:F1} sec", timeRemain);
-                //timeRemain -= intervalScoreboard; //(Time.fixedTime-timeLast);  //so what, it's nto time accurate
+                timeRemain -= intervalScoreboard; //(Time.fixedTime-timeLast);  //so what, it's nto time accurate
                 
                 // compute similarity score within local variable
                 matchScore = ComputeMatch(biasDistance);
@@ -366,7 +381,11 @@ public class TaskDoing : TaskInteractionBase {
                 if (timeRemain <= 0) 
                 {
                     timeRemain = 0.0f;
-                    SetTaskState(TASK_STATE.STATE_FINISH);
+                    if (clipTimeup) 
+                    {
+                        AudioSource.PlayClipAtPoint(clipTimeup, Camera.main.transform.position);
+                    }
+                    SetTaskState(TASK_STATE.FINISH);
                 }
             }
             else {
@@ -383,12 +402,12 @@ public class TaskDoing : TaskInteractionBase {
     {
         if (typeTrigger != DialogTrigger.TRIGGER_TYPE.TRIGGER_EXIT)     //enter -> start
         {
-            SetTaskState(TASK_STATE.STATE_START);
+            SetTaskState(TASK_STATE.START);
             StartCoroutine("ScoreboardUpdate");
         }
         else    // exit -> reset
         {
-            SetTaskState(TASK_STATE.STATE_RESET);
+            SetTaskState(TASK_STATE.RESET);
             StopCoroutine("ScoreboardUpdate");
         }
     }

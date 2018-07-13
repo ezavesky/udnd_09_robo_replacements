@@ -246,7 +246,7 @@ public class DialogController : MonoBehaviour
         //     semantics for T are either "stay", "enter" or "exit" -- tightly chained to DialogTrigger.TRIGGER_TYPE
         //  interval numbers allow a randomized entry into one of N different changes (or always a single if only one)
         DICT_UTTERANCE = new Dictionary<string, Utterance>{
-            { "doing_enter_0", new Utterance(null, 0.0f, "I don't eat, but I compute that you do. Can you teach me to cook?") }, 
+            //{ "doing_enter_0", new Utterance(null, 0.0f, "I don't eat, but I compute that you do. Can you teach me to cook?") }, 
             { "doing_exit_0", new Utterance(null, 0.0f, "No problem. I will prepare tonight's meal from space worms and purified gray water!") }, 
             { "seeing_enter_0", new Utterance(null, 0.0f, "As your world's future architect, I must learn about 'circles'. Can you help?") }, 
             { "seeing_enter_1", new Utterance(null, 0.3f, "As a simulator, I could add quite well. I compute that's the same as building a bridge. Can you help?") }, 
