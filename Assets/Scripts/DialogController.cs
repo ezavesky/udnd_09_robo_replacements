@@ -123,6 +123,11 @@ public class DialogController : MonoBehaviour
                     textDialog.text = uttNew.text;
                 }
             }
+            //TODO: something smarter with spatial information?
+            if (uttNew.clip != null)
+            {
+                 AudioSource.PlayClipAtPoint(uttNew.clip, Camera.main.transform.position);
+            }
         }
         /* -- no need to do anything to text to hide!
         else 
@@ -222,7 +227,11 @@ public class DialogController : MonoBehaviour
             text = _text;
             clip = null;        //TODO: load dynamically
             name = null;
-            // clip = Resources.Load<AudioClip>("Sounds/cube_up");
+        }
+        public void LoadResource (string _name) 
+        {
+            name = _name;
+            clip = Resources.Load<AudioClip>(string.Format("Sounds/{0}", name));
         }
     }
 
@@ -267,6 +276,11 @@ public class DialogController : MonoBehaviour
             { "seeing_enter_3", new Utterance(null, 0.9f, "What's the matter, haven't you seen a painting of snow before? Please join our imaginoids today!") },
             { "seeing_enter_4", new Utterance(null, 0.95f, "I think you came a little early, this task doesn't look done yet? Come back later?") },
         };
+        //go through and load actual clip
+        foreach (KeyValuePair<string,Utterance> kvp in DICT_UTTERANCE)
+        {
+            kvp.Value.LoadResource(kvp.Key);
+        }
     }
     
     static protected Dictionary<string, List<string>> DICT_RANDOMIZER = new Dictionary<string, List<string> >();
