@@ -18,7 +18,9 @@ public class IKControl : MonoBehaviour
 
     public Transform sentryA = null;
     public Transform sentryB = null;
+    protected object tweenMovement = null;
     public string sentryState = "walk";
+    public float intervalSentry = 4.0f;     //number of seconds for whole 
 
     void Awake () 
     {
@@ -67,18 +69,43 @@ public class IKControl : MonoBehaviour
             // finally, execute our sentry routine (alternate between two points)
             if (sentryA!=null && sentryB!=null)
             {
-                
-
-
-
-
+                if (tweenMovement == null) 
+                {
+                    tweenMovement = TargetNextSentry();
+                    animator.SetInteger("Speed", 1);
+                }
             }
-
-
         }
     } 
 
+    protected object TargetNextSentry()
+    {
+        float distA = Vector3.Distance(sentryA.position, transform.position);
+        float distB = Vector3.Distance(sentryB.position, transform.position);
+        float distTotal = Vector3.Distance(sentryB.position, sentryA.position);
+        Transform targetNext;
+        float intervalNext = 0f;
 
+        if (distA > distB)
+        {
+            targetNext = sentryA;
+            intervalNext = distA/distTotal*intervalSentry;
+        }
+        else
+        {
+            targetNext = sentryB;
+            intervalNext = distB/distTotal*intervalSentry;
+        }
+        
+        //turn the acting animator towards our new target
+        transform.LookAt(targetNext);
+        //start a tween of invisible object between animator and first sentry point
+        object ltReturn = LeanTween.move(gameObject, targetNext.position, intervalNext).setOnComplete(
+            () => { TargetNextSentry(); }
+        );
+        //Debug.Log(string.Format("[IKControl]: Turning to new target {0}", targetNext.name));
+        return ltReturn;
+    }
 
 
 }
