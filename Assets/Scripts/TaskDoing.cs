@@ -16,7 +16,7 @@ public class TaskDoing : TaskInteractionBase {
     protected float timeGame = 120.0f;
     protected float timeRemain = 0.0f;
     protected float matchScore = 0.0f;
-    protected float biasDistance = 1.0f;    //closer to 1 is distance, closer to 0 is rotation-based
+    protected float biasDistance = 0.8f;    //closer to 1 is distance, closer to 0 is rotation-based
 
     public Transform rootPlateReference;
     public Transform rootPlatePlayer;
@@ -24,6 +24,7 @@ public class TaskDoing : TaskInteractionBase {
     public Transform rootResourcesPlayer;
     public Transform rootResourcesRobot;
 
+    protected GameObject objCloneRoot = null;
     public GameObject objFoodSource;
     protected List<GameObject> listFoods = new List<GameObject>();
     public GameObject rootAnimationFreeze = null;
@@ -83,6 +84,7 @@ public class TaskDoing : TaskInteractionBase {
                 break;
 
             case TASK_STATE.STATE_START_NEXT:
+                ActivatePrefabSet(idxPrefabActive, PREFAB_STATE.INACTIVE);
                 idxPrefabActive = (idxPrefabActive + 1) % listFoods.Count;
                 goto case TASK_STATE.STATE_START;    //fall through
 
@@ -152,6 +154,7 @@ public class TaskDoing : TaskInteractionBase {
             if (stateNew==PREFAB_STATE.INACTIVE)
             {
                 objClone.SetActive(false);
+                objClone.transform.parent = objCloneRoot.transform;
             }
             else    //activating, so we need to check if player or robot 
             {
@@ -162,6 +165,7 @@ public class TaskDoing : TaskInteractionBase {
                     if (stateNew==PREFAB_STATE.ACTIVE)
                     {
                         objClone.transform.position = rootResourcesPlayer.position;
+                        objClone.transform.parent = rootPlatePlayer.transform;
                     }
                 }
                 else
@@ -171,6 +175,7 @@ public class TaskDoing : TaskInteractionBase {
                     if (stateNew==PREFAB_STATE.ACTIVE)
                     {
                         objClone.transform.position = rootResourcesRobot.position;
+                        objClone.transform.parent = rootPlateRobot.transform;
                     }
                 }
                 objClone.SetActive(true);   // let object fall into basket from anchor
@@ -195,9 +200,17 @@ public class TaskDoing : TaskInteractionBase {
     {
         //tasks: clone sets of prefab examples into two pairs: player and robobt ones
         //       create a nested object under this one to contain all sets
-        GameObject cloneRoot = new GameObject();
-        cloneRoot.name = "_cloneRoot";
-        cloneRoot.transform.parent = transform;
+        if (objCloneRoot == null)
+        {
+            objCloneRoot = new GameObject();
+        }
+        objCloneRoot.name = "_cloneRoot";
+        objCloneRoot.transform.parent = transform;
+        if (objCloneRoot.transform.childCount > 0)
+        {
+            return;
+        }
+
         //TODO: clobber this cloneroot, too?
         listFoods.Clear();
 
@@ -208,7 +221,7 @@ public class TaskDoing : TaskInteractionBase {
         VRTK.VRTK_InteractableObject apiInteract;
         int i, j, k;
 
-        for (i=0; i<objFoodSource.transform.GetChildCount(); i++) 
+        for (i=0; i<objFoodSource.transform.childCount; i++) 
         {
             objFoodBase = objFoodSource.transform.GetChild(i).gameObject;
             listFoods.Add(objFoodBase);
@@ -226,7 +239,7 @@ public class TaskDoing : TaskInteractionBase {
                 {
                     newObjs[k] = Instantiate(objSource);
                     newObjs[k].SetActive(false);
-                    newObjs[k].transform.parent = cloneRoot.transform;
+                    newObjs[k].transform.parent = objCloneRoot.transform;
                     newObjs[k].isStatic = false;
                     rb = newObjs[k].GetComponent<Rigidbody>();
                     if (rb) 
@@ -264,37 +277,19 @@ public class TaskDoing : TaskInteractionBase {
             return;
         }
         // at this point, robot should be tracking this object, so we don't need to add it again...
-        GameObject objTracking = dictObjectRobot[objTarget.GetInstanceID()];
+        GameObject objTracking = dictObjectRobot[objTarget.GetInstanceID()];        
+        // use this trick (local transforms only) because the we have normalized by the parent's space via transform
+        Vector3 ptNew = objTarget.transform.localPosition;
+        // Debug.Log(string.Format("[TaskDoing]: Move from {0} to new {1}; source {2}", objTracking.transform.position, ptNew, objTarget.transform.position));
         
-        // just smoothly transition the object to its new position...
-        //      move point out of reference from 
-        // Vector3 ptNew = objTracking.transform.InverseTransformPoint(
-        //     objTracking.transform.TransformPoint(objTracking.transform.localPosition)
-        //     - rootPlateRobot.transform.TransformPoint(rootPlateRobot.transform.localPosition)
-        //     + (objTarget.transform.TransformPoint(objTarget.transform.localPosition)
-        //     - rootPlatePlayer.transform.TransformPoint(rootPlatePlayer.transform.localPosition)) );
-        // objTracking.transform.localPosition = ptNew;
-
-        //METHOD 1: it offsets to the right place, but the X/Y and X/Z directions aren't right because
-        //          the robot's table is rotated
-        Vector3 ptNew = rootPlateRobot.transform.position
-                             + (objTarget.transform.position - rootPlatePlayer.transform.position);
-
-        // METHOD 2: comptue the offset, but sneak in as local position; rotate transform then retrieve new position
-        // Transform transTurn = rootPlatePlayer.transform;
-        // transTurn.localPosition = (objTarget.transform.position - rootPlatePlayer.transform.position);
-        // transTurn.eulerAngles = rootPlateRobot.eulerAngles;
-        // Vector3 ptNew = transTurn.localPosition + rootPlateRobot.position;
-
-        Debug.Log(string.Format("[TaskDoing]: Move from {0} to new {1}; source {2}", objTracking.transform.position, ptNew, objTarget.transform.position));
-        objTracking.transform.position = ptNew;
-
-        // ptRef = objRef.transform.TransformDirection(objRef.transform.eulerAngles)
-        //         - rootPlatePlayer.transform.TransformDirection(rootPlateReference.transform.eulerAngles);
+        // smoothly transition the object to its new position...
+        LeanTween.moveLocal(objTracking, ptNew, intervalScoreboard*0.8f);
+        LeanTween.rotateLocal(objTracking, objTarget.transform.localEulerAngles, intervalScoreboard*0.8f);
+        //objTracking.transform.localPosition = ptNew;
+        //objTracking.transform.localRotation = objTarget.transform.localRotation;
 
         // update equivalent robot hand to track along with look
         // move object around in space, updating robot 
-
     }
 
     protected float ComputeMatch(float biasDistance = 1.0f)  
@@ -308,7 +303,7 @@ public class TaskDoing : TaskInteractionBase {
         Vector3 ptPlayer, ptRef;
 
         //foreach item in the reference
-        for (int i=0; i < listFoods[idxPrefabActive].transform.GetChildCount(); i++)
+        for (int i=0; i < listFoods[idxPrefabActive].transform.childCount; i++)
         {
             objRef = listFoods[idxPrefabActive].transform.GetChild(i).gameObject;
             if (!dictObjectReference.ContainsKey(objRef.GetInstanceID()))
@@ -319,27 +314,28 @@ public class TaskDoing : TaskInteractionBase {
                 objCompare = dictObjectReference[objRef.GetInstanceID()];
                 
                 //  compute the position (plate normalized) differences
-                ptRef = objRef.transform.position - rootPlateReference.transform.position;
-                ptPlayer = objCompare.transform.position - rootPlatePlayer.transform.position;
-                localDist = Vector3.Distance(ptPlayer, ptRef);
+                localDist = Vector3.Distance(objRef.transform.localPosition, objCompare.transform.localPosition);
                 // Debug.Log(string.Format("[TaskDoing]: PTS {3} @ {0} - REF {1}, PLAYER {2}", objRef.GetInstanceID(), ptRef, ptPlayer, localDist));
                 userDist += localDist;
 
                 //  compute the angular differences
-                // ptRef = objRef.transform.TransformDirection(objRef.transform.localEulerAngles)
-                //         - rootPlatePlayer.transform.TransformDirection(rootPlateReference.transform.localEulerAngles);
-                // ptPlayer = objCompare.transform.TransformDirection(objCompare.transform.localEulerAngles)
-                //         - rootPlateReference.transform.TransformDirection(rootPlateReference.transform.localEulerAngles);
+                localDist = Vector3.Distance(objRef.transform.localEulerAngles, objCompare.transform.localEulerAngles);
                 // Debug.Log(string.Format("[TaskDoing]: ANG {3} @ {0} - REF {1}, PLAYER {2}", objRef.GetInstanceID(), ptRef, ptPlayer, localDist));
-                userAngle += Vector3.Distance(ptPlayer, ptRef);
+                userAngle += localDist/360f;
             }
         }
 
         //return the weighted total of user components
         float distCombined = (userDist * biasDistance) + (userAngle * (1-biasDistance));
 
-        // TODO: some normalization scheme to get to 0-1 position
-        return distCombined;
+        // h(x) = Min(Max(0,(2^(-x/100+8))/300), 100)
+        //      good distance function
+        // http://www.wolframalpha.com/input/?x=0&y=0&i=h(x)+%3D+2%5E(-x%2F100%2B8) - plot example
+
+        // some normalization scheme to get to 0-1 position
+        float matchNorm = 1 - Mathf.Min(Mathf.Max(0,Mathf.Pow(2,(-distCombined+8))), 1);
+        //Debug.Log(string.Format("[TaskDoing]: Dist {0}, Angle {1}, Combined {2}, Norm {3}", userDist, userAngle, distCombined, matchNorm));
+        return matchNorm;
     }
 
 
@@ -364,7 +360,7 @@ public class TaskDoing : TaskInteractionBase {
                 }
                 if (objRightGrab)
                 {
-                    UpdateMirroredPosition(objLeftGrab);
+                    UpdateMirroredPosition(objRightGrab);
                 }
 
                 if (timeRemain <= 0) 

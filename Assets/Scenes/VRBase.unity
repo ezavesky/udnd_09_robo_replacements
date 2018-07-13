@@ -3023,7 +3023,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 395119830}
   m_LocalRotation: {x: 0.115277015, y: -0.6976469, z: -0.115277015, w: 0.6976469}
-  m_LocalPosition: {x: 1.8389999, y: 1.794, z: -0.692}
+  m_LocalPosition: {x: 1.8389999, y: 1.458, z: -0.692}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 986115474}
@@ -3061,7 +3061,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speedMovement: 0.05
-  distHover: 0.2
+  distHover: 0.15
   allowRotate: 0
 --- !u!1001 &411958664
 Prefab:
@@ -4450,7 +4450,7 @@ GameObject:
   m_Component:
   - component: {fileID: 498779915}
   m_Layer: 0
-  m_Name: plate_holder
+  m_Name: plate_holder_player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4462,7 +4462,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 498779914}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0.010672152, y: 0.023000002, z: -0.11699982}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -4470,7 +4470,7 @@ Transform:
   - {fileID: 1079022378}
   m_Father: {fileID: 751136440}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!43 &508164980
 Mesh:
   m_ObjectHideFlags: 0
@@ -5341,13 +5341,13 @@ Transform:
   m_PrefabParentObject: {fileID: 400002, guid: 96d54aedd1404498f9bc19338813ef48, type: 3}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 607801792}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0.7071068, w: 0}
   m_LocalPosition: {x: 0.0013275146, y: 0.00999999, z: 0}
   m_LocalScale: {x: 0.0935232, y: 0.093523346, z: 0.043817483}
   m_Children: []
   m_Father: {fileID: 1185611426}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90.00001, y: -180, z: 0}
 --- !u!54 &607801794
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -47438,15 +47438,15 @@ Transform:
   m_PrefabParentObject: {fileID: 448656, guid: 696e5bd12772e4f30a08a8fdac10df48, type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 667729083}
-  m_LocalRotation: {x: -0, y: -0, z: -0.26378796, w: 0.9645808}
-  m_LocalPosition: {x: 0.5589992, y: 1.989, z: 0.3080001}
+  m_LocalRotation: {x: -0.041139238, y: 0.15043186, z: -0.26056036, w: 0.9527781}
+  m_LocalPosition: {x: 0.5589992, y: 1.989, z: 0.613}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1921031746}
   - {fileID: 1859273257}
   m_Father: {fileID: 1930334970}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -30.590002}
+  m_LocalEulerAnglesHint: {x: 0, y: 17.944, z: -30.590002}
 --- !u!95 &667729085
 Animator:
   serializedVersion: 3
@@ -49022,7 +49022,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 770056527}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 2.9589996, y: 1.47, z: 0.34800005}
+  m_LocalPosition: {x: 3.247, y: 1.594, z: 0.246}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1414334889}
@@ -50506,7 +50506,7 @@ GameObject:
   - component: {fileID: 939652788}
   - component: {fileID: 939652787}
   m_Layer: 0
-  m_Name: plate_player
+  m_Name: charger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50781,7 +50781,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4285013349487420, guid: 8e9fe4734f28d4007923145a6f8f3648, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -0.963
+      value: 0.82
       objectReference: {fileID: 0}
     - target: {fileID: 4285013349487420, guid: 8e9fe4734f28d4007923145a6f8f3648, type: 2}
       propertyPath: m_LocalPosition.y
@@ -50789,7 +50789,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4285013349487420, guid: 8e9fe4734f28d4007923145a6f8f3648, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4285013349487420, guid: 8e9fe4734f28d4007923145a6f8f3648, type: 2}
       propertyPath: m_LocalRotation.x
@@ -50847,13 +50847,13 @@ Transform:
   m_PrefabParentObject: {fileID: 469498, guid: 696e5bd12772e4f30a08a8fdac10df48, type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 958588659}
-  m_LocalRotation: {x: 4.135932e-25, y: -3.3087457e-24, z: 7.716249e-18, w: 1}
+  m_LocalRotation: {x: -0.000029787423, y: -0.028916927, z: -0.00016126038, w: 0.9995818}
   m_LocalPosition: {x: 0.0009843616, y: 0.004861067, z: 7.105427e-17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 158941643}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -0.004, y: -3.3140001, z: -0.018000001}
 --- !u!23 &958588661
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -51617,7 +51617,7 @@ GameObject:
   - component: {fileID: 1079022383}
   - component: {fileID: 1079022382}
   m_Layer: 0
-  m_Name: plate_player
+  m_Name: charger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52439,7 +52439,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1185611426}
   m_Layer: 0
-  m_Name: plate_holder
+  m_Name: plate_holder_robot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53270,13 +53270,13 @@ Transform:
   m_PrefabParentObject: {fileID: 400002, guid: 96d54aedd1404498f9bc19338813ef48, type: 3}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1268552602}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: -0.5, y: -0.5, z: -0.5, w: 0.5}
   m_LocalPosition: {x: 0.0013275146, y: 0.00999999, z: 0}
   m_LocalScale: {x: 0.0935232, y: 0.093523346, z: 0.043817483}
   m_Children: []
   m_Father: {fileID: 498779915}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90.00001, y: -90, z: 0}
 --- !u!54 &1268552604
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -53474,9 +53474,9 @@ MonoBehaviour:
   textHelp: {fileID: 421642891}
   textTimeLeft: {fileID: 895663198}
   textAccuracy: {fileID: 2080904578}
-  rootPlateReference: {fileID: 1770456226}
-  rootPlatePlayer: {fileID: 1268552603}
-  rootPlateRobot: {fileID: 607801793}
+  rootPlateReference: {fileID: 1736654145}
+  rootPlatePlayer: {fileID: 498779915}
+  rootPlateRobot: {fileID: 1185611426}
   rootResourcesPlayer: {fileID: 42231070}
   rootResourcesRobot: {fileID: 957416342}
   objFoodSource: {fileID: 1622682886}
@@ -56928,7 +56928,7 @@ GameObject:
   - component: {fileID: 1736654145}
   - component: {fileID: 1736654146}
   m_Layer: 0
-  m_Name: Rotator
+  m_Name: reference_holder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
