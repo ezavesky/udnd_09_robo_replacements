@@ -107,7 +107,6 @@ public class DialogController : MonoBehaviour
     {
         //  TODO: slide off screen via timer event
         bool bShow = false;
-        float localAnimate = bUseDelay ? timeAnimate : 0.0f;
         if (uttNew != null)
         {
             //Debug.Log(string.Format("[DialogController]: UtteranceToggle '{1}' (from {0})", uttNew.name, uttNew.text));
@@ -147,10 +146,16 @@ public class DialogController : MonoBehaviour
                 {
                     //LeanTween.move(transformDialog, transformVisible, localAnimate)
                     //    .setEase( LeanTweenType.easeInQuad );
-
-                    LeanTween.value(objDialog, callOnUpdate:UpdateUtterancePosition, 
-                                    from:0.0f, to:1.0f, time:localAnimate)
-                        .setEase( LeanTweenType.easeOutQuad );                        
+                    if (bUseDelay) 
+                    {
+                        LeanTween.value(objDialog, callOnUpdate:UpdateUtterancePosition, 
+                                        from:0.0f, to:1.0f, time:timeAnimate)
+                            .setEase( LeanTweenType.easeOutQuad );                        
+                    }
+                    else
+                    {
+                        UpdateUtterancePosition(1.0f, this);
+                    }
                 }
                 showCount++;
                 Invoke("HideUtterance", timeVisible+timeAnimate);     //for delay for correct op
@@ -159,12 +164,19 @@ public class DialogController : MonoBehaviour
             {
                 if (showCount==0) 
                 {
-                    //LeanTween.move(transformDialog, transformHidden, localAnimate)
-                    //    .setEase( LeanTweenType.easeInQuad );
+                    if (bUseDelay)
+                    {
+                        //LeanTween.move(transformDialog, transformHidden, localAnimate)
+                        //    .setEase( LeanTweenType.easeInQuad );
 
-                    LeanTween.value(objDialog, callOnUpdate:UpdateUtterancePosition, 
-                                    from:1.0f, to:0.0f, time:localAnimate)
-                        .setEase( LeanTweenType.easeInQuad );
+                        LeanTween.value(objDialog, callOnUpdate:UpdateUtterancePosition, 
+                                        from:1.0f, to:0.0f, time:timeAnimate)
+                            .setEase( LeanTweenType.easeInQuad );
+                    }
+                    else
+                    {
+                        UpdateUtterancePosition(0.0f, this);
+                    }
                 }
             }
         }
@@ -185,7 +197,7 @@ public class DialogController : MonoBehaviour
     {
 		// rtTarget.rect.height = fVal;
         //float closePos = openPos - 0.5f*openHeight + 0.5f*closeHeight;
-		float closePos = openPos - 1.5f*openHeight;
+		float closePos = openPos - 4f*openHeight;
 		float heightNew = openHeight; // (fPart * (openHeight-closeHeight))+closeHeight;
 		float posNew = (fPart * (openPos-closePos))+closePos;
         //Debug.Log(string.Format("[{4}] y/h {0}/{1} ---> {2}/{3}", openPos, openHeight, posNew, heightNew, fPart));
@@ -201,6 +213,16 @@ public class DialogController : MonoBehaviour
 		//update position as well
         // trans.localPosition = new Vector3(trans.localPosition.x, posNew, trans.localPosition.z);
 		transformDialog.localPosition = new Vector3(transformDialog.localPosition.x, posNew, transformDialog.localPosition.z);
+
+        //finally turn off if going dark
+        if (fPart == 0.0f) 
+        {
+            transformDialog.gameObject.SetActive(false);
+        }
+        else if (fPart == 1.0f)
+        {
+            transformDialog.gameObject.SetActive(true); //show immediately
+        }
 	}
 
     // optionally track state for next utterance
