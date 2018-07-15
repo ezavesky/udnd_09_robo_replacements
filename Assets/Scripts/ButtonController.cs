@@ -5,8 +5,12 @@ using UnityEngine.Events;
 
 public class ButtonController : MonoBehaviour
 {
-    protected VRTK.Controllables.VRTK_BaseControllable controllable;
+    protected VRTK.Controllables.PhysicsBased.VRTK_PhysicsPusher controllable;
     protected Text displayText;
+
+    public Color colorPushed;
+    protected Color colorNormal;
+    protected MeshRenderer renderObject;
 
     [System.Serializable]
     public sealed class ButtonPressed : UnityEvent<object, string>{};
@@ -55,7 +59,7 @@ public class ButtonController : MonoBehaviour
 
     void Awake()
     {
-        controllable = GetComponentInChildren<VRTK.Controllables.VRTK_BaseControllable>();
+        controllable = GetComponentInChildren<VRTK.Controllables.PhysicsBased.VRTK_PhysicsPusher>();
         if (controllable)
         {
             /*
@@ -66,6 +70,8 @@ public class ButtonController : MonoBehaviour
             }
             */
             controllable.ValueChanged += ValueChanged;
+            renderObject = controllable.GetComponent<MeshRenderer>();
+            colorNormal = renderObject.material.color;
         }
         displayText = GetComponentInChildren<Text>();
     }
@@ -78,6 +84,8 @@ public class ButtonController : MonoBehaviour
             {
                 OnPressed.Invoke(sender, buttonName);
                 wasPressed = true;
+                renderObject.material.color = colorPushed;
+
                 // Debug.Log(string.Format("[ButtonController]: PRESS {3} {0}, min {1}, max {2}", e.value, controllable.AtMinLimit(), controllable.AtMaxLimit(), buttonName));
             }
         }
@@ -88,6 +96,7 @@ public class ButtonController : MonoBehaviour
                 //Debug.Log(string.Format("[ButtonController]: RELEASE {3}, {0}, min {1}, max {2}, resting {4}", e.value, controllable.AtMinLimit(), controllable.AtMaxLimit(), buttonName, controllable.IsResting()));
                 OnReleased.Invoke(sender, buttonName);
                 wasPressed = false;
+                renderObject.material.color = colorNormal;
             }
         }
         /*
