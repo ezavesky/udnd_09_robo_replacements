@@ -152,7 +152,7 @@ public class TaskReading : TaskInteractionBase
                     DialogTrigger.TRIGGER_TYPE.TRIGGER_EXIT, storyActive+".");
                 buttonA.buttonEnabled = buttonC.buttonEnabled = true;
                 buttonB.buttonEnabled = false;
-                // strExample = "";
+                strExample = "idea";
                 break;
 
             case TASK_STATE.STATE_OPTION_CONFIRM:
@@ -190,7 +190,7 @@ public class TaskReading : TaskInteractionBase
                 strQuestion = GameManager.instance.DialogTrigger("reading_option", DialogTrigger.TRIGGER_TYPE.TRIGGER_EXIT);
                 buttonB.buttonEnabled = true;
                 buttonA.buttonEnabled = buttonC.buttonEnabled = false;
-                strExample = "idea";
+                strExample = "printing";
                 break;
 
             case TASK_STATE.STATE_PLAYBACK:     // confirm new story mode 
@@ -225,7 +225,7 @@ public class TaskReading : TaskInteractionBase
                 dictNextState[buttonC.buttonName] = TASK_STATE.STATE_TRAIN_EXIT;
                 buttonA.buttonName = "Replay";
                 dictNextState[buttonA.buttonName] = TASK_STATE.STATE_PLAYBACK;
-                strQuestion = GameManager.instance.DialogTrigger("reading_option", DialogTrigger.TRIGGER_TYPE.TRIGGER_EXIT);
+                strQuestion = GameManager.instance.DialogTrigger("doing_game", DialogTrigger.TRIGGER_TYPE.TRIGGER_EXIT);
                 buttonB.buttonEnabled = false;
                 buttonA.buttonEnabled = buttonC.buttonEnabled = true;
                 strExample = "recycle";
