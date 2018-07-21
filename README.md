@@ -13,6 +13,53 @@ User feedback was sampled both for individual design elements as well as longer 
 * Additional gamification stickers/badges for competing in the different levels
 * Possibly additional content within each game (more food combos, more stories to tell, more shapes), but initial user feedback did not cite this as a shortcoming.
 
+## Walkthrough
+Snapshots of the overall and individual levels are 
+included below.  For more comprehensive discussions of each task and their design, please see
+the [design docs](docs/design.pdf).
+
+<table>
+<tr><td><strong>Introduction</strong><a href="https://youtu.be/Kobba1wtcrI" target="_new">[video]</a>
+<ul><li>Upon entry, the user is introduced to the fictional company of Robo Replacements.</li>
+<li>The company has different task stations that the user must help with as a new employee.</li>
+<li>This environment has basic user interactions that change the narrative of each robot task.</li></ul>
+</td><td>
+<a href="docs/demo-01-intro.jpg" target="_new"><img alt="Introduction Area" src="docs/demo-01-intro.jpg" /></a>
+</td></tr>
+
+<tr><td><strong>Doing/Cooking</strong><a href="https://youtu.be/YjvpUNM3aP4" target="_new">[video]</a>
+<ul><li>The user must simulate a cooked item by stacking food parts in the same fashion as the exemplar.</li>
+<li>A timer and 3D placement and rotation matching scores are averaged and shown for motivation.</li>
+<li>For flare, cameras hover and the exemplar food rotates.</li>
+<li>The robot mimics then user actions via IK tracking of an object that is moved to a similar position as the user's target object.</li>
+<li>Objects are cloned for the robot side and given perfect position symmetry with relative parent position correspondence.</li>
+<li>Using IK targeting actions, the robot appears to mimic the user and is captured via "cameras" as in a TV display.</li></ul>
+</td><td>
+<a href="demo-02-doing.jpg" target="_new"><img alt="Doing/Cooking Examples" src="demo-02-doing.jpg" /></a>
+</td></tr>
+
+<tr><td><strong>Listening/Writing</strong><a href="https://youtu.be/-QmW1JUYp2c" target="_new">[video]</a>
+<ul><li>In the Listening and writing task, the robot prompts the user with a simple story to complete.  </li>
+<li>Instead of a full MadLibs implementation, a small set of words was hand picked for the user to choose from.</li>
+<li>Physics-based push buttons with dynamically populated text are the primary means for interaction.</li>
+<li>During playback, graphics associated with each user-selected word in the story are displayed.</li>
+<li>In code, stories are easily created and linked to key words via simple templated data structures.</li>
+<li>At time of writing this walkthrough, the stories were not auto-read through a text-to-speech system, but this could be a further refinement. </li></ul>
+</td><td>
+<a href="demo-03-listening.jpg" target="_new"><img alt="Listening/Writing Examples" src="demo-03-listening.jpg" /></a>
+</td></tr>
+
+<tr><td><strong>Seeing/Learning</strong><a href="https://youtu.be/gugcc3nOjKk" target="_new">[video]</a>
+<ul><li>The seeing task lets the user create basic pictures with a few shape primitives and evaluate them against in-app machine learning.</li>
+Unfortunately, timing prevented this task from being fully completed.  But some basic data was collected from a companion app and stored in the repo's /data directory.</li>
+Proximal to the user's interaction was a logic and matching readout to help them understand what was happening in the algorithm itself. </li></ul>
+</td><td>
+<a href="demo-03-listening.jpg" target="_new"><img alt="Seeing/Learning" src="demo-04-seeing.jpg" /></a>
+</td></tr>
+
+</table>
+
+
 ## Rubric Checks
 * **Animation (100)** - animation was incorporated for different robot movements; while the quality and diversity will be improved, a starter for each station is in place; robots within the seen were animated both with look-based IK as well as motion/aniation triggers throughout the level
 * **Lighting (100)** - where insuffficient with ambient lighting, real-time lamps were replicated and altered for hue; additioanlly, harnessing the directionality of the skybox a strong ambient light was created that has intersting shadow effects through windows.
@@ -21,14 +68,11 @@ User feedback was sampled both for individual design elements as well as longer 
 * **gamification (250)** - there are three mini-games within the space: one to teach (doing task), one to listen (speech recognition+ story reading task), one to challenge the AI (seeing task).  The user can repeat each of them for a diferent gaming experience.  Additionally, unique dialog entries are randomly chosen throughout the user's interactions with the robots.
 * **Diegetic UI (250)** - where possible visuals and audio-based communication is given to the user; some text is still required, but attempts were made to condense them into short buttons (**non-text components are essential to gameplay**)
 * **storyline (250)** - a lightweight dialog manager was hand-created with region triggers to start and end conversation with robots at different tasks; different conversations can be triggered for the same point using a coarse probabilty + random number selection
-* **AI (250)** - a system for training and evaluating placement of blocks to guess visual patterns was implemented -- due to timing this was not hooked into the main VR experience -- instead, only a supplemental 2D learner application was created to help create training data for online models in the game; agin though the models were not completed. (**30% completed**)
+* **AI (250)** - a system for training and evaluating placement of blocks to guess visual patterns was implemented -- due to timing this was not hooked into the main VR experience -- instead, only a supplemental 2D learner application was created to help create training data for online models in the game; agin though the models were not completed. (**partially completed**)
 * **speech recognition (500)** - speech recongition was investigated but it could not be hooked in for streaming in such a short amount of time (**not completed**)
 * **user testing (250)** - user testing was accomplished in two ways, early and quick user testing of individual ideas and visual concepts during design and implementation; a secondary, more complete test was also performed when siginificant milestones (like the completion of a task station); notes were taken along the way in the primary design document  (**evaluation and improvements included**)
 
 
-## Walkthrough
-Snapshots of the overall and individual levels are 
-included below.
 
 ## Data Sources
 Some assets were used from the open source community and are
