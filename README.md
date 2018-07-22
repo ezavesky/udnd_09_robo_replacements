@@ -18,16 +18,16 @@ Snapshots of the overall and individual levels are
 included below.  For more comprehensive discussions of each task and their design, please see
 the [design docs](docs/design.pdf).
 
-<table>
-<tr><td><strong>Introduction</strong><a href="https://youtu.be/Kobba1wtcrI" target="_new">[video]</a>
+<table width="100%" >
+<tr><td><strong>Introduction</strong> [<a href="https://youtu.be/Kobba1wtcrI" target="_new">YouTube video</a>]
 <ul><li>Upon entry, the user is introduced to the fictional company of Robo Replacements.</li>
 <li>The company has different task stations that the user must help with as a new employee.</li>
 <li>This environment has basic user interactions that change the narrative of each robot task.</li></ul>
-</td><td>
+</td><td width="40%" >
 <a href="docs/demo-01-intro.jpg" target="_new"><img alt="Introduction Area" src="docs/demo-01-intro.jpg" /></a>
 </td></tr>
 
-<tr><td><strong>Doing/Cooking</strong><a href="https://youtu.be/YjvpUNM3aP4" target="_new">[video]</a>
+<tr><td><strong>Doing/Cooking</strong> [<a href="https://youtu.be/YjvpUNM3aP4" target="_new">YouTube video</a>]
 <ul><li>The user must simulate a cooked item by stacking food parts in the same fashion as the exemplar.</li>
 <li>A timer and 3D placement and rotation matching scores are averaged and shown for motivation.</li>
 <li>For flare, cameras hover and the exemplar food rotates.</li>
@@ -35,10 +35,10 @@ the [design docs](docs/design.pdf).
 <li>Objects are cloned for the robot side and given perfect position symmetry with relative parent position correspondence.</li>
 <li>Using IK targeting actions, the robot appears to mimic the user and is captured via "cameras" as in a TV display.</li></ul>
 </td><td>
-<a href="demo-02-doing.jpg" target="_new"><img alt="Doing/Cooking Examples" src="demo-02-doing.jpg" /></a>
+<a href="docs/demo-02-doing.jpg" target="_new"><img alt="docs/Doing/Cooking Examples" src="docs/demo-02-doing.jpg" /></a>
 </td></tr>
 
-<tr><td><strong>Listening/Writing</strong><a href="https://youtu.be/-QmW1JUYp2c" target="_new">[video]</a>
+<tr><td><strong>Listening/Writing</strong> [<a href="https://youtu.be/-QmW1JUYp2c" target="_new">YouTube video</a>]
 <ul><li>In the Listening and writing task, the robot prompts the user with a simple story to complete.  </li>
 <li>Instead of a full MadLibs implementation, a small set of words was hand picked for the user to choose from.</li>
 <li>Physics-based push buttons with dynamically populated text are the primary means for interaction.</li>
@@ -46,15 +46,15 @@ the [design docs](docs/design.pdf).
 <li>In code, stories are easily created and linked to key words via simple templated data structures.</li>
 <li>At time of writing this walkthrough, the stories were not auto-read through a text-to-speech system, but this could be a further refinement. </li></ul>
 </td><td>
-<a href="demo-03-listening.jpg" target="_new"><img alt="Listening/Writing Examples" src="demo-03-listening.jpg" /></a>
+<a href="docs/demo-03-listening.jpg" target="_new"><img alt="Listening/Writing Examples" src="docs/demo-03-listening.jpg" /></a>
 </td></tr>
 
-<tr><td><strong>Seeing/Learning</strong><a href="https://youtu.be/gugcc3nOjKk" target="_new">[video]</a>
+<tr><td><strong>Seeing/Learning</strong> [<a href="https://youtu.be/gugcc3nOjKk" target="_new">YouTube video</a>]
 <ul><li>The seeing task lets the user create basic pictures with a few shape primitives and evaluate them against in-app machine learning.</li>
 Unfortunately, timing prevented this task from being fully completed.  But some basic data was collected from a companion app and stored in the repo's /data directory.</li>
 Proximal to the user's interaction was a logic and matching readout to help them understand what was happening in the algorithm itself. </li></ul>
 </td><td>
-<a href="demo-03-listening.jpg" target="_new"><img alt="Seeing/Learning" src="demo-04-seeing.jpg" /></a>
+<a href="docs/demo-03-listening.jpg" target="_new"><img alt="Seeing/Learning" src="docs/demo-04-seeing.jpg" /></a>
 </td></tr>
 
 </table>
@@ -97,7 +97,7 @@ documented below.
 ### Story Media
 Specifically, in this section these (mostly image assets) were utilized for parts of the reading/listening task as background images that would be visualized on the robot's working terminal.
 
-* [reading task screen saver](https://www.youtube.com/watch?v=Fn44paKMX4E) derived from [this screen saver](https://www.screensaversplanet.com/screensavers/retro-sci-fi-522/)
+* [reading task screen saver](https://www.YouTube.com/watch?v=Fn44paKMX4E) derived from [this screen saver](https://www.screensaversplanet.com/screensavers/retro-sci-fi-522/)
 * [training messages](https://www.pexels.com/photo/group-of-people-holding-message-boards-1059116/)
 * [monkey in mirror](https://www.pexels.com/photo/closeup-photo-of-primate-1207875/)
 * [tiger](https://www.pexels.com/photo/close-up-photography-of-tiger-792381/)
