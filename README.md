@@ -5,6 +5,20 @@ This project is part of [Udacity](https://www.udacity.com "Udacity - Be in deman
 ## Design and Gameplay
 Extensive design, testing, and scope tracking is documented in [design docs](docs/design.pdf).  
 
+### Runtime
+The application was designed and tested 
+to run in both the Vive and Oculus environments.  By default, it will 
+attempt to use the SteamVR framework, but you can switch the VR engine
+by selecting other options in a combo-box in the top right.  This 
+strategy (powered by the [VRTK engine](https://vrtoolkit.readme.io/)
+even allows testing via keyboard with no VR engine at all.
+
+A compiled version of the application is accessible in multi-part files
+``build_robo_replacements_parts.zip``.  Standatd unzip software should correctly reassemble the 
+files and unzip automatically.  Additionally, the supplemental learner
+software (currently, it only collects samples) is included in the file
+``build_learner3d.zip``.
+
 ### User Feedback
 User feedback was sampled both for individual design elements as well as longer play sessions.  Check out the [design docs](docs/design.pdf) for more verbose logging and discussion.
 
