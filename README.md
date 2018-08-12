@@ -31,7 +31,7 @@ User feedback was sampled both for individual design elements as well as longer 
 ## Walkthrough
 Snapshots and a [video playlist](https://www.youtube.com/watch?v=cj1P0A9aLzI&list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ) of the overall and individual levels are 
 included below.  For more comprehensive discussions of each task and their design, please see
-the [design docs](docs/design.pdf) and Rubric Checks below.
+the [design docs](docs/design.pdf) and Rubric Checks below.  
 
 <table width="100%" >
 <thead><tr><td>Showcase</td><td>Content Examples</td></tr></thead><tbody>
@@ -86,21 +86,20 @@ Proximal to the user's interaction was a logic and matching readout to help them
 
 
 ## Rubric Checks
-Below, each item for the rubric check is documented below. Alternatively, the
-[video playlist](https://www.youtube.com/watch?v=cj1P0A9aLzI&list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ) 
-contains walkthroughs of each experience.
+Below, each item for the rubric check is documented below, but is also compiled 
+in this [fully annotated rubric video](https://youtu.be/ldxt1tvMELA).
 
 <table width="100%" >
 <thead><tr><td>Rubric</td></tr></thead><tbody>
 
 <tr><td><strong>Animation (100)</strong> 
-animation was incorporated for different robot movements; while the quality and diversity will be improved, a starter for each station is in place; robots within the seen were animated both with look-based IK as well as motion/aniation triggers throughout the level
-<ul><li>animation is used for adding lifely robot reactions - <a target="_new" href='https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=248'>example from reading task</a>, <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=105">example walking robot</a></li>
+animation was incorporated for different robot movements; while the quality and diversity will be improved, a starter for each station is in place; robots within the scene were animated both with look-based IK as well as motion/animation triggers throughout the level
+<ul><li>animation is used for adding lifelike robot reactions - <a target="_new" href='https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=248'>example from reading task</a>, <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=105">example walking robot</a></li>
 <li>animation is explicitly used for a robot to mimic user actions through IK - <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=63">example from doing task</a></li>
 </ul></td></tr>
 
 <tr><td><strong>Lighting (100)</strong> 
-where insuffficient with ambient lighting, real-time lamps were replicated and altered for hue; additioanlly, harnessing the directionality of the skybox a strong ambient light was created that has intersting shadow effects through windows.</li>
+where insufficient with ambient lighting, real-time lamps were replicated and altered for hue; additionally, harnessing the directionality of the skybox a strong ambient light was created that has interesting shadow effects through windows.
 <ul><li>lighting is added for mood with subtle particle effects where possible (and not computationally challenging) - <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=14">example from reading corner</a>, <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=63">example from task corner</a></li>
 </ul></td></tr>
 
@@ -116,7 +115,7 @@ primarily used to motivate each task, background videos (open source) were oppor
 </ul></td></tr>
 
 <tr><td><strong>gamification (250)</strong> 
-there are three mini-games within the space: one to teach (doing task), one to listen (speech recognition+ story reading task), one to challenge the AI (seeing task).  The user can repeat each of them for a diferent gaming experience.  Additionally, unique dialog entries are randomly chosen throughout the user's interactions with the robots.
+there are three mini-games within the space: one to teach (doing task), one to listen (speech recognition+ story reading task), one to challenge the AI (seeing task).  The user can repeat each of them for a different gaming experience.  Additionally, unique dialog entries are randomly chosen throughout the user's interactions with the robots.
 <ul><li>each task is divided into multiple sections  (multiple locations)</li>
 <li>throughout the game, dynamic dialog interactions - <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=174">example from doing task</a></li>
 </ul></td></tr>
@@ -133,7 +132,7 @@ a lightweight dialog manager was hand-created with region triggers to start and 
 </ul></td></tr>
 
 <tr><td><strong>AI (250)</strong> 
-a system for training and evaluating placement of blocks to guess visual patterns was implemented -- due to timing this was not hooked into the main VR experience -- instead, only a supplemental 2D learner application was created to help create training data for online models in the game; agin though the models were not completed. <strong>(partially completed)</strong>
+a system for training and evaluating placement of blocks to guess visual patterns was implemented -- due to timing this was not hooked into the main VR experience -- instead, only a supplemental 2D learner application was created to help create training data for online models in the game; again though the models were not completed. <strong>(partially completed)</strong>
 <ul><li>method for feature exgtraction was created but actual classificaiton was not fully completed - <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=134">example from seeing task</a>, <a target="_new" href="build_learner3d.zip">example supplementary data collection app</a></li>
 </ul></td></tr>
 
@@ -142,7 +141,7 @@ speech recongition was investigated but it could not be hooked in for streaming 
 </td></tr>
 
 <tr><td><strong>user testing (250)</strong> 
-user testing was accomplished in two ways, early and quick user testing of individual ideas and visual concepts during design and implementation; a secondary, more complete test was also performed when siginificant milestones (like the completion of a task station); notes were taken along the way in the primary design document <strong>(evaluation and improvements included)</strong>
+user testing was accomplished in two ways, early and quick user testing of individual ideas and visual concepts during design and implementation; a secondary, more complete test was also performed when significant milestones (like the completion of a task station); notes were taken along the way in the primary design document <strong>(evaluation and improvements included)</strong>
 <ul><li>design docs - <a target="_new" href="docs/design.pdf">user testing section</a> describes revisions made based on user opinions of characters and interactions</li>
 </ul></td></tr>
 
