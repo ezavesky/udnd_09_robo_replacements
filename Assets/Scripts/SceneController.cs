@@ -8,6 +8,7 @@ public class SceneController : MonoBehaviour {
     //public string[] nameLevels = new string[0];
     public GameObject objBlackBoxStart = null;       // one-time on-start fade object
     public TeleportObjToggle teleporterController = null;
+    public VRTK_BodyPhysics vrtkBodyPhysics = null;
     protected string nameSceneMain = null;
     protected string nameSceneLast = null;
     protected GameObject objToolParent = null;

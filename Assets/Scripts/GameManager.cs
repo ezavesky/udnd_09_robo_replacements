@@ -39,6 +39,8 @@ public class GameManager : Singleton<GameManager>
     protected DialogController dialogController = null;  //allow manipulation of the dialog
     public Transform toolParentTransform = null;  // transform to use for created tools
     public System.Random rand = new System.Random();    // shared random number gen
+    protected Vector3 positionLastDialog = Vector3.zero;
+    protected float distMinMove = Mathf.Sqrt(0.5f);    //half a unit away
 
     // validate star/collectable possiblity when teleported from a valid location
     public bool normalPlay { 
@@ -117,10 +119,28 @@ public class GameManager : Singleton<GameManager>
          dialogController = dialogControllerNew;
     }
 
-    public string DialogTrigger(string nameTrigger, DialogTrigger.TRIGGER_TYPE typeTrigger, string textAddendum=null) 
+    public bool DialogPositionMoved() 
+    {
+        if (!sceneController || !sceneController.vrtkBodyPhysics) { //never had indicator of position?
+            return true;
+        }
+        Vector3 positionNew = sceneController.vrtkBodyPhysics.GetFootColliderContainer().transform.position;
+        float distMove = Vector3.Distance(positionNew, positionLastDialog);
+        //Debug.Log(string.Format("[GameManager] DialogPositionMoved {0}, to new position {1}", distMove, positionNew));
+
+        positionLastDialog = positionNew;
+        return (distMove >= distMinMove);
+    }
+
+    public string DialogTrigger(string nameTrigger, DialogTrigger.TRIGGER_TYPE typeTrigger, 
+                                string textAddendum=null, bool checkMovement=false) 
     {
         if (dialogController)
         {
+            if (!DialogPositionMoved() && checkMovement) {
+                //Debug.Log("[GameManager]: Aborting trigger due to insufficient movement.");
+                return null;
+            }
             return dialogController.TriggerUtterance(nameTrigger, typeTrigger, textAddendum);
         }
         return null;

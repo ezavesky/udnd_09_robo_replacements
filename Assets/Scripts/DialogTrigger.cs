@@ -44,7 +44,7 @@ public class DialogTrigger : MonoBehaviour {
             PlayClip(audioSrc, soundHit);
         }
         typeLast = typeTrigger;
-        GameManager.instance.DialogTrigger(nameTrigger, typeTrigger);
+        GameManager.instance.DialogTrigger(nameTrigger, typeTrigger, null, true);
         OnTrigger.Invoke(nameTrigger, typeTrigger);
 	}
 

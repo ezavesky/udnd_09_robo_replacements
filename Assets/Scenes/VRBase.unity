@@ -6665,7 +6665,7 @@ Transform:
   m_Children:
   - {fileID: 2110332858}
   m_Father: {fileID: 1472509280}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &566059605
 MonoBehaviour:
@@ -6812,7 +6812,7 @@ Transform:
   - {fileID: 1083717217}
   - {fileID: 1750598358}
   m_Father: {fileID: 1472509280}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &582935470
 MonoBehaviour:
@@ -57965,6 +57965,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objBlackBoxStart: {fileID: 462274141}
   teleporterController: {fileID: 323356887}
+  vrtkBodyPhysics: {fileID: 0}
   nameSceneNext: SpaceOutpost
 --- !u!114 &1423592649
 MonoBehaviour:
@@ -58371,10 +58372,10 @@ Transform:
   m_LocalPosition: {x: 5.149, y: 0.35, z: 9.045}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1962298074}
   - {fileID: 566059604}
   - {fileID: 1925934435}
   - {fileID: 582935469}
-  - {fileID: 1962298074}
   - {fileID: 902545759}
   m_Father: {fileID: 1989082674}
   m_RootOrder: 0
@@ -63064,7 +63065,7 @@ Transform:
   m_Children:
   - {fileID: 1149182521}
   m_Father: {fileID: 1472509280}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1925934436
 MonoBehaviour:
@@ -63627,7 +63628,7 @@ Transform:
   - {fileID: 1663938835}
   - {fileID: 686044120}
   m_Father: {fileID: 1472509280}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1962298075
 MonoBehaviour:
@@ -63950,11 +63951,11 @@ MonoBehaviour:
   autoManageVRSettings: 1
   autoLoadSetup: 1
   setups:
-  - {fileID: 902545760}
-  - {fileID: 582935470}
   - {fileID: 1962298075}
-  - {fileID: 1925934436}
+  - {fileID: 582935470}
   - {fileID: 566059605}
+  - {fileID: 902545760}
+  - {fileID: 1925934436}
   excludeTargetGroups: 1a0000001b000000
   persistOnLoad: 0
 --- !u!1 &1994753502
