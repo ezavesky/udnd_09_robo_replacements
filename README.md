@@ -7,8 +7,8 @@ Extensive design, testing, and scope tracking is documented in [design docs](doc
 
 ### Runtime
 The application was designed and tested 
-to run in both the Vive and Oculus environments.  By default, it will 
-attempt to use the SteamVR framework, but you can switch the VR engine
+to run in both the Vive and Oculus environments.  By default, the game will 
+attempt to use the Oculus, then the SteamVR framework, but you can switch the VR engine
 by selecting other options in a combo-box in the top right.  This 
 strategy (powered by the [VRTK engine](https://vrtoolkit.readme.io/)
 even allows testing via keyboard with no VR engine at all.
@@ -26,19 +26,30 @@ User feedback was sampled both for individual design elements as well as longer 
 * Use of computer vision in seeing task for matching visual objects; using 2D companion app to compose
 * Additional gamification stickers/badges for competing in the different levels
 * Possibly additional content within each game (more food combos, more stories to tell, more shapes), but initial user feedback did not cite this as a shortcoming.
+* A few interactivity components: properly size dialog panel for both VR environments, fix overlapping audio playback
 
 ## Walkthrough
-Snapshots of the overall and individual levels are 
+Snapshots and a [video playlist](https://www.youtube.com/watch?v=cj1P0A9aLzI&list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ) of the overall and individual levels are 
 included below.  For more comprehensive discussions of each task and their design, please see
-the [design docs](docs/design.pdf).
+the [design docs](docs/design.pdf) and Rubric Checks below.
 
 <table width="100%" >
+<thead><tr><td>Showcase</td><td>Content Examples</td></tr></thead><tbody>
+
+<tr><td><strong>Continuous Walkthrough</strong> [<a href="https://youtu.be/cj1P0A9aLzI" target="_new">YouTube video</a>]
+<ul><li>Full walkthrough (original video) for sections below.</li>
+<li>Demonstrates continuous flow through program with Oculus controllers.</li>
+<li>Transition to each work task is also included, often with slightly fuzzy boundary conditions (by spatial box trigger).</li></ul>
+</td><td width="40%" >
+<a href="docs/demo-01-intro.jpg" target="_new"><img alt="Introduction Area" src="docs/demo-01-intro.jpg" /></a>
+</td></tr>
+
 <tr><td><strong>Introduction</strong> [<a href="https://youtu.be/Kobba1wtcrI" target="_new">YouTube video</a>]
 <ul><li>Upon entry, the user is introduced to the fictional company of Robo Replacements.</li>
 <li>The company has different task stations that the user must help with as a new employee.</li>
 <li>This environment has basic user interactions that change the narrative of each robot task.</li></ul>
 </td><td width="40%" >
-<a href="docs/demo-01-intro.jpg" target="_new"><img alt="Introduction Area" src="docs/demo-01-intro.jpg" /></a>
+<a href="https://youtu.be/Kobba1wtcrI" target="_new"><img alt="Central Hallway" src="docs/demo-01-intro.jpg" /></a>
 </td></tr>
 
 <tr><td><strong>Doing/Cooking</strong> [<a href="https://youtu.be/YjvpUNM3aP4" target="_new">YouTube video</a>]
@@ -71,20 +82,71 @@ Proximal to the user's interaction was a logic and matching readout to help them
 <a href="docs/demo-03-listening.jpg" target="_new"><img alt="Seeing/Learning" src="docs/demo-04-seeing.jpg" /></a>
 </td></tr>
 
-</table>
+</tbody></table>
 
 
 ## Rubric Checks
-* **Animation (100)** - animation was incorporated for different robot movements; while the quality and diversity will be improved, a starter for each station is in place; robots within the seen were animated both with look-based IK as well as motion/aniation triggers throughout the level
-* **Lighting (100)** - where insuffficient with ambient lighting, real-time lamps were replicated and altered for hue; additioanlly, harnessing the directionality of the skybox a strong ambient light was created that has intersting shadow effects through windows.
-* **Locomotion (100)** - locomotion uses a combination of open teleporting along a main path through the output with specific regions of interest denoted with differently colored waypoints that will turn the user towards the location of primary action
-* **video (max 100)** - primarily used to motivate each task, background videos (open source) were opportunistically included; many static and moving image sources were utilized to enhance gameplay and lighten the mood; many custom objects were included
-* **gamification (250)** - there are three mini-games within the space: one to teach (doing task), one to listen (speech recognition+ story reading task), one to challenge the AI (seeing task).  The user can repeat each of them for a diferent gaming experience.  Additionally, unique dialog entries are randomly chosen throughout the user's interactions with the robots.
-* **Diegetic UI (250)** - where possible visuals and audio-based communication is given to the user; some text is still required, but attempts were made to condense them into short buttons (**non-text components are essential to gameplay**)
-* **storyline (250)** - a lightweight dialog manager was hand-created with region triggers to start and end conversation with robots at different tasks; different conversations can be triggered for the same point using a coarse probabilty + random number selection
-* **AI (250)** - a system for training and evaluating placement of blocks to guess visual patterns was implemented -- due to timing this was not hooked into the main VR experience -- instead, only a supplemental 2D learner application was created to help create training data for online models in the game; agin though the models were not completed. (**partially completed**)
-* **speech recognition (500)** - speech recongition was investigated but it could not be hooked in for streaming in such a short amount of time (**not completed**)
-* **user testing (250)** - user testing was accomplished in two ways, early and quick user testing of individual ideas and visual concepts during design and implementation; a secondary, more complete test was also performed when siginificant milestones (like the completion of a task station); notes were taken along the way in the primary design document  (**evaluation and improvements included**)
+Below, each item for the rubric check is documented below. Alternatively, the
+[video playlist](https://www.youtube.com/watch?v=cj1P0A9aLzI&list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ) 
+contains walkthroughs of each experience.
+
+<table width="100%" >
+<thead><tr><td>Rubric</td></tr></thead><tbody>
+
+<tr><td><strong>Animation (100)</strong> 
+animation was incorporated for different robot movements; while the quality and diversity will be improved, a starter for each station is in place; robots within the seen were animated both with look-based IK as well as motion/aniation triggers throughout the level
+<ul><li>animation is used for adding lifely robot reactions - <a target="_new" href='https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=248'>example from reading task</a>, <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=105">example walking robot</a></li>
+<li>animation is explicitly used for a robot to mimic user actions through IK - <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=63">example from doing task</a></li>
+</ul></td></tr>
+
+<tr><td><strong>Lighting (100)</strong> 
+where insuffficient with ambient lighting, real-time lamps were replicated and altered for hue; additioanlly, harnessing the directionality of the skybox a strong ambient light was created that has intersting shadow effects through windows.</li>
+<ul><li>lighting is added for mood with subtle particle effects where possible (and not computationally challenging) - <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=14">example from reading corner</a>, <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=63">example from task corner</a></li>
+</ul></td></tr>
+
+<tr><td><strong>Locomotion (100)</strong> 
+locomotion uses a combination of open teleporting along a main path through the output with specific regions of interest denoted with differently colored waypoints that will turn the user towards the location of primary action
+<ul><li>teleportation is used as primary movement - <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=24">example from introduction</a>
+</ul></td></tr>
+
+<tr><td><strong>Video (100)</strong> 
+primarily used to motivate each task, background videos (open source) were opportunistically included; many static and moving image sources were utilized to enhance gameplay and lighten the mood; many custom objects were included
+<ul><li>background video for mood and motivation - <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=36">example from doing task</a></li>
+<li>subtle screen video for robot/mood establishment - <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=249">example from reading task</a></li>
+</ul></td></tr>
+
+<tr><td><strong>gamification (250)</strong> 
+there are three mini-games within the space: one to teach (doing task), one to listen (speech recognition+ story reading task), one to challenge the AI (seeing task).  The user can repeat each of them for a diferent gaming experience.  Additionally, unique dialog entries are randomly chosen throughout the user's interactions with the robots.
+<ul><li>each task is divided into multiple sections  (multiple locations)</li>
+<li>throughout the game, dynamic dialog interactions - <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=174">example from doing task</a></li>
+</ul></td></tr>
+
+<tr><td><strong>Diegetic UI (250)</strong> 
+where possible visuals and audio-based communication is given to the user; some text is still required, but attempts were made to condense them into short buttons <strong>(non-text components are essential to gameplay)</strong>
+<ul><li>illustrates use of buttons with pictures to assist in utility - <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=136">example from seeing task</a></li>
+<li>illustrates use of exemplars (the physical objects) and a near-field camera (camera texture) to demonstrate utility - <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=44">example of food from doing task</a></li>
+</ul></td></tr>
+
+<tr><td><strong>storyline (250)</strong> 
+a lightweight dialog manager was hand-created with region triggers to start and end conversation with robots at different tasks; different conversations can be triggered for the same point using a coarse probabilty + random number selection
+<ul><li>spoken and textual prompts motivate each robot's task area - <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=197">example from reading task</a></li>
+</ul></td></tr>
+
+<tr><td><strong>AI (250)</strong> 
+a system for training and evaluating placement of blocks to guess visual patterns was implemented -- due to timing this was not hooked into the main VR experience -- instead, only a supplemental 2D learner application was created to help create training data for online models in the game; agin though the models were not completed. <strong>(partially completed)</strong>
+<ul><li>method for feature exgtraction was created but actual classificaiton was not fully completed - <a target="_new" href="https://youtu.be/cj1P0A9aLzI?list=PLP6hAB9G6NbGH7MubiU66SX7FY8zyJqUJ&t=134">example from seeing task</a>, <a target="_new" href="build_learner3d.zip">example supplementary data collection app</a></li>
+</ul></td></tr>
+
+<tr><td><strong>speech recognition (500)</strong> 
+speech recongition was investigated but it could not be hooked in for streaming in such a short amount of time <strong>(not completed)</strong>
+</td></tr>
+
+<tr><td><strong>user testing (250)</strong> 
+user testing was accomplished in two ways, early and quick user testing of individual ideas and visual concepts during design and implementation; a secondary, more complete test was also performed when siginificant milestones (like the completion of a task station); notes were taken along the way in the primary design document <strong>(evaluation and improvements included)</strong>
+<ul><li>design docs - <a target="_new" href="docs/design.pdf">user testing section</a> describes revisions made based on user opinions of characters and interactions</li>
+</ul></td></tr>
+
+</tbody></table>
 
 
 
